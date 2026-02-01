@@ -13,7 +13,7 @@ export default function ContactPage() {
 
   const validateEmail = (e: string) => /\S+@\S+\.\S+/.test(e);
 
-  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
 
@@ -32,7 +32,8 @@ export default function ContactPage() {
     try {
       await apiFetch("/contact/", {
         method: "POST",
-         body: JSON.stringify({ name, email, message }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
       });
       setSubmitted(true);
     } catch (err: any) {
