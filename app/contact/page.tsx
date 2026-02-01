@@ -32,7 +32,7 @@ export default function ContactPage() {
     try {
       await apiFetch("/contact/", {
         method: "POST",
-        body: { name, email, message },
+         body: JSON.stringify({ name, email, message }),
       });
       setSubmitted(true);
     } catch (err: any) {
