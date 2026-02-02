@@ -5,7 +5,8 @@ const BASE_ROOT: string = (
   IS_BROWSER
     ? process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
     : process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
-).replace(/\/+$/, ""); // remove trailing slash
+).replace(/\/+$/, ""); 
+
 
 // Main fetch function
 export async function apiFetch<T = any>(
