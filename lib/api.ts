@@ -1,68 +1,63 @@
-
 const IS_BROWSER = typeof window !== "undefined";
 
-//Base URL ---
+// Base URL
 const BASE_ROOT: string = (
   IS_BROWSER
     ? process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
     : process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
 ).replace(/\/+$/, ""); // remove trailing slash
 
-//  Main fetch function ---
+// Main fetch function
 export async function apiFetch<T = any>(
   endpoint: string,
   options: RequestInit & { body?: Record<string, any> | string | null } = {}
 ): Promise<T> {
-  // Normalize endpoint
-  const path = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
-  const url = `${BASE_ROOT}${path}`; 
+  // Normalize endpoint → always /path/
+  const normalized = endpoint.replace(/^\/+|\/+$/g, "");
+  const path = `/${normalized}/`;
+  const url = `${BASE_ROOT}${path}`;
 
-  // Prepare headers
+  // Headers
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     ...(options.headers as Record<string, string> | undefined),
   };
 
-  // Prepare body
+  // Body
   let body = options.body;
   if (body && typeof body !== "string" && headers["Content-Type"].includes("application/json")) {
     body = JSON.stringify(body);
   }
 
-  const fetchOpts: RequestInit = { ...options, headers, body };
+  const fetchOpts: RequestInit = {
+    ...options,
+    headers,
+    body,
+  };
 
-  // Browser-specific settings
- if (IS_BROWSER) {
-  fetchOpts.mode = "cors";
-}
-
-  // Debug logging in development
+  // Debug (dev only)
   if (process.env.NODE_ENV !== "production") {
-    console.debug("apiFetch ->", { url, method: fetchOpts.method ?? "GET", headers, body });
+    console.debug("apiFetch ->", {
+      url,
+      method: fetchOpts.method ?? "GET",
+      body,
+    });
   }
 
-  // Perform fetch
-  let response: Response;
-  try {
-    response = await fetch(url, fetchOpts);
-  } catch (err: any) {
-    console.error("apiFetch network error:", err);
-    throw err;
-  }
+  // Fetch
+  const response = await fetch(url, fetchOpts);
 
-  // Handle non-OK responses
   if (!response.ok) {
-    let errorBody: any = null;
-    try {
-      const ct = response.headers.get("content-type") || "";
-      errorBody = ct.includes("application/json") ? await response.json() : await response.text();
-    } catch (e) {
-      errorBody = String(e);
-    }
-    throw new Error(typeof errorBody === "string" ? errorBody : JSON.stringify(errorBody));
+    const ct = response.headers.get("content-type") || "";
+    const errorBody = ct.includes("application/json")
+      ? await response.json()
+      : await response.text();
+    throw new Error(
+      typeof errorBody === "string" ? errorBody : JSON.stringify(errorBody)
+    );
   }
 
-  // Return JSON if possible
+  // Return
   const ctype = response.headers.get("content-type") || "";
   if (ctype.includes("application/json")) return response.json();
   return (await response.text()) as unknown as T;
