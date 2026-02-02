@@ -1,21 +1,21 @@
-// lib/apiFetch.ts
+
 const IS_BROWSER = typeof window !== "undefined";
 
-// --- 1) Base URL ---
+//Base URL ---
 const BASE_ROOT: string = (
   IS_BROWSER
     ? process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
     : process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
 ).replace(/\/+$/, ""); // remove trailing slash
 
-// --- 2) Main fetch function ---
+//  Main fetch function ---
 export async function apiFetch<T = any>(
   endpoint: string,
   options: RequestInit & { body?: Record<string, any> | string | null } = {}
 ): Promise<T> {
   // Normalize endpoint
   const path = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
-  const url = `${BASE_ROOT}${path}`; // Full backend URL
+  const url = `${BASE_ROOT}${path}`; 
 
   // Prepare headers
   const headers: Record<string, string> = {
@@ -32,10 +32,9 @@ export async function apiFetch<T = any>(
   const fetchOpts: RequestInit = { ...options, headers, body };
 
   // Browser-specific settings
-  if (IS_BROWSER) {
-    fetchOpts.mode = "cors";
-    fetchOpts.credentials = "include"; // send cookies if needed
-  }
+ if (IS_BROWSER) {
+  fetchOpts.mode = "cors";
+}
 
   // Debug logging in development
   if (process.env.NODE_ENV !== "production") {
