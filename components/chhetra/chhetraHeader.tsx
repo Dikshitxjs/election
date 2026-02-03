@@ -1,110 +1,170 @@
 "use client";
 
-type ChhetraHeaderProps = {
-  chhetraNumber: string;
-  chhetraName: string;
-  totalCandidates: number;
-  onBack?: () => void;
-  showInfo?: boolean;
-};
+import { useState, useEffect, useRef } from "react";
+import { Chhetra } from "@/types/candidate";
 
-export default function ChhetraHeader({
-  chhetraNumber,
-  chhetraName,
-  totalCandidates,
-  onBack,
-  showInfo = true,
-}: ChhetraHeaderProps) {
+interface ChhetraFilterProps {
+  chhetras: Chhetra[];
+  selectedChhetra: string;
+  onChhetraChange: (chhetraId: string) => void;
+  showAllOption?: boolean;
+  label?: string;
+  className?: string;
+}
+
+export default function ChhetraFilter({
+  chhetras,
+  selectedChhetra,
+  onChhetraChange,
+  showAllOption = true,
+  label = "Filter by Chhetra",
+  className = "",
+}: ChhetraFilterProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const listId = "chhetra-filter-list";
+
+  const selectedChhetraName =
+    selectedChhetra === "all"
+      ? "All Chhetras"
+      : chhetras.find((c) => c.id === Number(selectedChhetra))?.name ??
+        `Chhetra ${selectedChhetra}`;
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (isOpen && dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen]);
+
+  const handleSelect = (value: string) => {
+    onChhetraChange(value);
+    setIsOpen(false);
+  };
+
+  const openAndInit = () => {
+    setIsOpen(true);
+    const idx = chhetras.findIndex((c) => c.id === Number(selectedChhetra));
+    setHighlightedIndex(idx >= 0 ? idx : 0);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!isOpen && ["ArrowDown", "Enter", " "].includes(e.key)) {
+      e.preventDefault();
+      openAndInit();
+      return;
+    }
+    if (e.key === "Escape") setIsOpen(false);
+    if (e.key === "ArrowDown")
+      setHighlightedIndex((prev) => (prev === null ? 0 : Math.min(prev + 1, chhetras.length - 1)));
+    if (e.key === "ArrowUp")
+      setHighlightedIndex((prev) => (prev === null ? chhetras.length - 1 : Math.max(prev - 1, 0)));
+    if (e.key === "Enter" && highlightedIndex !== null) {
+      handleSelect(chhetras[highlightedIndex].id.toString());
+    }
+  };
+
   return (
-    <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
-      <div className="px-4 pt-6 pb-4">
-        {/* Back Button */}
-        {onBack && (
-          <button 
-            onClick={onBack}
-            className="flex items-center gap-2 text-sm font-medium mb-4 hover:text-blue-200 transition"
-          >
-            <svg 
-              className="w-4 h-4" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
-            Back to Explore
-          </button>
-        )}
+    <div className={`chhetra-filter ${className}`} ref={dropdownRef}>
+      <label className="block text-sm font-medium text-gray-900 mb-2">{label}</label>
 
-        {/* Main Header Content */}
-        <div className="flex items-start justify-between">
-          <div>
-            {/* Chhetra Badge & Info */}
-            <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <span className="text-blue-200 text-xs font-medium bg-blue-900/30 px-2 py-1 rounded-full">
-                Chhetra {chhetraNumber}
-              </span>
-              <span className="text-xs text-blue-200 hidden sm:inline">•</span>
-              <span className="text-xs text-blue-200">
-                {totalCandidates} Candidate{totalCandidates !== 1 ? 's' : ''}
-              </span>
-            </div>
-            
-            {/* Chhetra Name */}
-            <h1 className="text-xl font-bold">{chhetraName}</h1>
-            
-            {/* Subtitle */}
-            <p className="text-blue-200 text-sm mt-1">
-              Public Opinion Poll • Nepal Election 2081
-            </p>
-          </div>
-          
-          {/* Info Icon (Optional) */}
-          {showInfo && (
-            <button 
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition shrink-0"
-              aria-label="Chhetra Information"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </button>
-          )}
-        </div>
-
-        {/* Stats Bar */}
-        <div className="mt-4 pt-4 border-t border-blue-500/30">
-          <div className="flex items-center justify-between text-sm">
-            <div className="text-center flex-1">
-              <div className="font-bold">{totalCandidates}</div>
-              <div className="text-blue-200 text-xs">Candidates</div>
-            </div>
-            <div className="w-px h-6 bg-blue-500/50"></div>
-            <div className="text-center flex-1">
-              <div className="font-bold flex items-center justify-center gap-1">
-                <span className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></span>
-                Live
-              </div>
-              <div className="text-blue-200 text-xs">Poll Active</div>
-            </div>
-            <div className="w-px h-6 bg-blue-500/50"></div>
-            <div className="text-center flex-1">
-              <div className="font-bold">Anonymous</div>
-              <div className="text-blue-200 text-xs">Voting</div>
-            </div>
-          </div>
-        </div>
+      {/* Desktop Dropdown */}
+      <div className="hidden md:block">
+        <select
+          value={selectedChhetra}
+          onChange={(e) => onChhetraChange(e.target.value)}
+          className="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        >
+          {showAllOption && <option value="all">All Chhetras</option>}
+          {chhetras.map((c) => (
+            <option key={c.id} value={c.id.toString()}>
+              {c.name} — {c.region}
+            </option>
+          ))}
+        </select>
       </div>
+
+      {/* Mobile Dropdown */}
+      <div className="md:hidden relative">
+        <button
+          id={`${listId}-button`}
+          type="button"
+          aria-expanded={isOpen}
+          aria-controls={listId}
+          aria-haspopup="listbox"
+          onClick={() => (isOpen ? setIsOpen(false) : openAndInit())}
+          onKeyDown={handleKeyDown}
+          className="w-full p-3 border border-gray-300 rounded-lg bg-white flex items-center justify-between text-gray-800"
+        >
+          <span className="truncate">{selectedChhetraName}</span>
+          <svg
+            className={`w-5 h-5 text-gray-500 transition-transform ${isOpen ? "rotate-180" : ""}`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        {isOpen && (
+          <div
+            id={listId}
+            role="listbox"
+            tabIndex={-1}
+            onKeyDown={handleKeyDown}
+            className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-y-auto"
+          >
+            {showAllOption && (
+              <button
+                role="option"
+                aria-selected={selectedChhetra === "all"}
+                onClick={() => handleSelect("all")}
+                className={`w-full text-left px-4 py-3 hover:bg-blue-50 rounded-t-lg ${
+                  selectedChhetra === "all" ? "bg-blue-50 text-blue-700" : ""
+                }`}
+              >
+                All Chhetras
+              </button>
+            )}
+
+            {chhetras.map((ch, idx) => {
+              const isSelected = selectedChhetra === ch.id.toString();
+              const isHighlighted = highlightedIndex === idx;
+              return (
+                <button
+                  key={ch.id}
+                  role="option"
+                  aria-selected={isSelected}
+                  onClick={() => handleSelect(ch.id.toString())}
+                  onMouseEnter={() => setHighlightedIndex(idx)}
+                  className={`w-full text-left px-4 py-3 hover:bg-blue-50 border-t border-gray-100 ${
+                    isSelected ? "bg-blue-50 text-blue-700" : ""
+                  } ${isHighlighted ? "bg-gray-100" : ""}`}
+                >
+                  <div className="font-medium text-gray-900">{ch.name}</div>
+                  <div className="text-sm text-gray-500">{ch.region} Region</div>
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {selectedChhetra !== "all" && (
+        <div className="mt-2 flex items-center justify-between">
+          <div className="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+            {selectedChhetraName}
+          </div>
+          <button onClick={() => onChhetraChange("all")} className="text-sm text-gray-500 hover:text-gray-700">
+            Clear
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -17,9 +17,7 @@ export default function ChhetraSelector({
     apiFetch("/chhetras").then(setChhetras);
   }, []);
 
-  const filtered = chhetras.filter((c) =>
-    c.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = chhetras.filter((c) => c.name.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div className="fixed inset-0 bg-white z-50 flex flex-col">
@@ -32,7 +30,7 @@ export default function ChhetraSelector({
           placeholder="Search Chhetra..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full p-3 border rounded-xl"
+          className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
 
@@ -43,9 +41,13 @@ export default function ChhetraSelector({
             <button
               key={c.id}
               onClick={() => onSelectChhetra(c.id.toString())}
-              className={`w-full text-left p-4 rounded-xl border ${isSelected ? 'bg-blue-50 text-blue-800' : 'bg-gray-50 hover:bg-blue-50'}`}
+              className={`w-full text-left p-4 rounded-xl border transition ${
+                isSelected
+                  ? "bg-blue-50 text-blue-800 border-blue-300"
+                  : "bg-gray-50 border-gray-200 hover:bg-blue-50"
+              }`}
             >
-              <p className="font-semibold">{c.name}</p>
+              <p className="font-semibold text-gray-900">{c.name}</p>
               <p className="text-sm text-gray-500">Chhetra {c.id}</p>
             </button>
           );
