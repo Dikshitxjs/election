@@ -13,7 +13,8 @@ import { apiFetch } from "@/lib/api";
 import { Candidate, Chhetra } from "@/types/candidate";
 
 export default function ExplorePage() {
-  const router = useRouter();
+ const _router = useRouter();
+
   const { getFingerprint } = useFingerprint();
 
   // ----- State -----
