@@ -10,6 +10,8 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
   const [showComments, setShowComments] = useState(false);
   const [photoSrc, setPhotoSrc] = useState<string | null>(null);
   const [badgeSrc, setBadgeSrc] = useState<string | null>(null);
+  const [displayName, setDisplayName] = useState<string | null>(null);
+  const [usePlaceholder, setUsePlaceholder] = useState(false);
 
   // Build slug variants for filenames the user may have used (spaces, hyphens, lowercase)
   const slug = (s: string) => s.trim();
@@ -20,12 +22,18 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
     // candidate image fallbacks (.jpg, .png)
     const name = candidate?.photo || candidate?.name || "";
     const tryList = [
+      `/candidates/${enc(name)}.webp`,
       `/candidates/${enc(name)}.jpg`,
       `/candidates/${enc(name)}.png`,
+      `/candidates/${slugHyphen(name)}.webp`,
       `/candidates/${slugHyphen(name)}.jpg`,
       `/candidates/${slugHyphen(name)}.png`,
+      `/candidates/${slug(name)}.webp`,
       `/candidates/${slug(name)}.jpg`,
       `/candidates/${slug(name)}.png`,
+      `/candidates/${candidate?.id}.webp`,
+      `/candidates/${candidate?.id}.jpg`,
+      `/candidates/${candidate?.id}.png`,
     ];
 
     setPhotoSrc(tryList[0]);
@@ -36,10 +44,13 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
     const p = candidate?.party || "";
     const badgeList = [
       `/party-badges/${enc(p)}.svg`,
+      `/party-badges/${enc(p)}.webp`,
       `/party-badges/${enc(p)}.png`,
       `/party-badges/${slugHyphen(p)}.svg`,
+      `/party-badges/${slugHyphen(p)}.webp`,
       `/party-badges/${slugHyphen(p)}.png`,
       `/party-badges/${slug(p)}.svg`,
+      `/party-badges/${slug(p)}.webp`,
       `/party-badges/${slug(p)}.png`,
     ];
     setBadgeSrc(badgeList[0]);
@@ -66,26 +77,54 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
         <div className="flex items-start gap-3">
           {/* Photo */}
           <div className="shrink-0">
-            <img
-              src={photoSrc || `/candidates/${candidate.id}.jpg`}
-              alt={candidate.name}
-              className="w-16 h-16 sm:w-20 sm:h-20 rounded-md object-cover ring-1 ring-gray-100 shadow-sm"
-              onError={(e) => {
-                try {
-                  const arr = (photoAttempts as any)[candidate?.id] || [];
-                  // remove current src and pick next
-                  arr.shift();
-                  if (arr.length > 0) {
-                    setPhotoSrc(arr[0]);
-                  } else {
-                    // final fallback: use numbered id image
-                    setPhotoSrc(`/candidates/${candidate.id}.jpg`);
+            {usePlaceholder ? (
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-md ring-1 ring-gray-100 shadow-sm bg-gray-200 flex items-center justify-center text-gray-800 font-bold">
+                {/* SVG-like initials + name */}
+                <div className="text-center">
+                  <div className="text-lg sm:text-xl">{(candidate.name || displayName || "?").split(" ").map(s=>s[0]||"").slice(0,2).join("")}</div>
+                </div>
+              </div>
+            ) : (
+              <img
+                src={photoSrc || `/candidates/${candidate.id}.jpg`}
+                alt={candidate.name}
+                className="w-16 h-16 sm:w-20 sm:h-20 rounded-md object-cover ring-1 ring-gray-100 shadow-sm"
+                onLoad={(e) => {
+                  try {
+                    const src = (e.currentTarget as HTMLImageElement).src || "";
+                    if (src.includes("/candidates/")) {
+                      const parts = src.split("/");
+                      const file = parts[parts.length - 1];
+                      const base = file.replace(/\.[^/.]+$/, "");
+                      // if base is not purely numeric, derive a name
+                      if (!/^\d+$/.test(base)) {
+                        const nameFromFile = decodeURIComponent(base).replace(/[-_]+/g, " ");
+                        const titled = nameFromFile
+                          .split(" ")
+                          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                          .join(" ");
+                        setDisplayName(titled);
+                      }
+                    }
+                  } catch (err) {}
+                }}
+                onError={(e) => {
+                  try {
+                    const arr = (photoAttempts as any)[candidate?.id] || [];
+                    // remove current src and pick next
+                    arr.shift();
+                    if (arr.length > 0) {
+                      setPhotoSrc(arr[0]);
+                    } else {
+                      // no more images: show placeholder (SVG initials)
+                      setUsePlaceholder(true);
+                    }
+                  } catch (err) {
+                    setUsePlaceholder(true);
                   }
-                } catch (err) {
-                  setPhotoSrc(`/candidates/${candidate.id}.jpg`);
-                }
-              }}
-            />
+                }}
+              />
+            )}
           </div>
 
           {/* Name and Party */}
@@ -98,6 +137,9 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
                 src={badgeSrc || partyBadgeSrc}
                 alt={candidate.party}
                 className="w-6 h-6 sm:w-7 sm:h-7 object-contain shrink-0 rounded"
+                onLoad={(e) => {
+                  // nothing for now
+                }}
                 onError={(e) => {
                   try {
                     const arr = (badgeAttempts as any)[candidate?.id] || [];
