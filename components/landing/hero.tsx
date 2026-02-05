@@ -31,7 +31,7 @@ export default function Hero() {
         <div className="mb-8">
           <div className="border-2 border-teal-100 bg-white rounded-lg p-6 shadow-sm">
             <div className="flex gap-4 items-start">
-              <div className="flex-shrink-0 w-12 h-12 rounded-md bg-teal-50 flex items-center justify-center text-teal-700">
+              <div className="shrink-0 w-12 h-12 rounded-md bg-teal-50 flex items-center justify-center text-teal-700">
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 2L2 7v13h20V7L12 2zm0 2.18L19.6 8 12 11.82 4.4 8 12 4.18zM6 10v9h4v-6h4v6h4v-9L12 14 6 10z" />
                 </svg>

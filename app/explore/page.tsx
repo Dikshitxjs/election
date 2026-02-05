@@ -161,7 +161,7 @@ export default function ExplorePage() {
             {/* Find Your Chhetra Button */}
             <button
               onClick={() => setShowChhetraSelector(true)}
-              className="w-full bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-semibold py-3 rounded-lg transition shadow-md hover:shadow-lg text-sm sm:text-base flex items-center justify-center gap-2"
+              className="w-full bg-linear-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-semibold py-3 rounded-lg transition shadow-md hover:shadow-lg text-sm sm:text-base flex items-center justify-center gap-2"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 1118 0z" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
