@@ -60,7 +60,7 @@ export default function VoteActions({ candidateId, initialSupport, initialOppose
     <div className="space-y-3">
       {/* Vote Progress Bar - two tone (support / oppose) on a light track */}
       {totalVotes > 0 && (
-        <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden border border-gray-200">
+        <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden border border-gray-200">
           <div className="flex w-full h-full">
             <div
               className="h-full transition-all duration-300 bg-emerald-600"
@@ -82,52 +82,48 @@ export default function VoteActions({ candidateId, initialSupport, initialOppose
           onClick={() => vote("support")}
           disabled={disabled || loading}
           aria-label="Vote for this candidate"
-          className={`flex-1 py-3 sm:py-3.5 rounded-lg font-semibold text-sm sm:text-base transition-all duration-150 flex items-center justify-center gap-2 border ${
+          className={`flex-1 py-3 sm:py-3.5 rounded-lg font-semibold text-sm sm:text-base transition-all duration-150 flex flex-col items-center justify-center gap-1.5 border ${
             disabled
               ? "bg-gray-50 text-gray-400 border-gray-100 cursor-not-allowed"
-              : "bg-white text-gray-800 border-gray-300 hover:shadow-sm"
+              : "bg-white text-gray-800 border-emerald-300 hover:bg-emerald-50 hover:border-emerald-400"
           }`}
           title={disabled ? "Vote already recorded" : "Vote for this candidate"}
         >
-          {/* Nepali swastik SVG icon (religious symbol) - styled as icon */}
-          <svg aria-hidden width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-emerald-700">
+          {/* Swastik Icon */}
+          <svg aria-hidden width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-emerald-700">
             <g stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 9h4v2H6v4H3V9z" />
               <path d="M9 3h2v4h4v2h-4v4H9V3z" />
               <path d="M21 15h-4v-2h1v-3h-3v5h-2v4h8v-4z" />
             </g>
           </svg>
-          <span className="flex-1 text-left">
-            <span className="block text-sm font-bold">Vote</span>
-            <span className="block text-xs text-gray-500">{support} votes</span>
-          </span>
+          <span className="block text-xs font-bold leading-tight">Vote</span>
+          <span className="block text-[10px] text-gray-500">{support}</span>
         </button>
 
         <button
           onClick={() => vote("oppose")}
           disabled={disabled || loading}
           aria-label="Don't vote / oppose"
-          className={`flex-1 py-3 sm:py-3.5 rounded-lg font-semibold text-sm sm:text-base transition-all duration-150 flex items-center justify-center gap-2 ${
+          className={`flex-1 py-3 sm:py-3.5 rounded-lg font-semibold text-sm sm:text-base transition-all duration-150 flex flex-col items-center justify-center gap-1.5 ${
             disabled
-              ? "bg-gray-50 text-gray-400 border-gray-100 cursor-not-allowed"
-              : "bg-white text-gray-800 border border-red-100 hover:bg-red-50"
+              ? "bg-gray-50 text-gray-400 border border-gray-100 cursor-not-allowed"
+              : "bg-white text-gray-800 border border-red-300 hover:bg-red-50 hover:border-red-400"
           }`}
           title={disabled ? "Vote already recorded" : "Don't vote / Oppose"}
         >
-          <svg aria-hidden width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-red-600">
-            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          <svg aria-hidden width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-red-600">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" fill="currentColor" />
           </svg>
-          <span className="flex-1 text-left">
-            <span className="block text-sm font-bold">Don't Vote</span>
-            <span className="block text-xs text-gray-500">{oppose} votes</span>
-          </span>
+          <span className="block text-xs font-bold leading-tight">Skip</span>
+          <span className="block text-[10px] text-gray-500">{oppose}</span>
         </button>
       </div>
 
       {/* Voted Badge */}
       {disabled && (
-        <div className="text-center py-2 px-3 bg-emerald-50 rounded-lg border border-emerald-100">
-          <p className="text-xs sm:text-sm font-bold text-emerald-700">Your vote has been recorded</p>
+        <div className="text-center py-2.5 px-3 bg-emerald-50 rounded-lg border border-emerald-200">
+          <p className="text-xs sm:text-sm font-bold text-emerald-700">✓ Your vote recorded</p>
         </div>
       )}
     </div>
