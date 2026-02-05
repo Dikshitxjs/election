@@ -1,9 +1,9 @@
 "use client";
 
 const navItems = [
-  { label: "Home", path: "/", icon: "🏠" },
-  { label: "Explore", path: "/explore", icon: "🗳️" },
-  { label: "Contact", path: "/contact", icon: "📞" },
+  { label: "Home", path: "/", icon: "⌂" },
+  { label: "Districts", path: "/explore", icon: "◈" },
+  { label: "Contact", path: "/contact", icon: "✉" },
 ];
 
 
@@ -26,18 +26,18 @@ export default function BottomNav() {
 	}, []);
 
 	return (
-		<nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-md">
+		<nav className="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 shadow-lg">
 			<div className="flex justify-around max-w-md mx-auto">
 				{navItems.map((item) => (
 					<button
 						key={item.path}
 						onClick={() => router.push(item.path)}
-						className={`flex flex-col items-center py-2 text-xs w-full transition ${pathname === item.path ? "text-blue-600" : "text-gray-500"}`}
+						className={`flex flex-col items-center py-3 text-xs w-full transition font-bold ${pathname === item.path ? "text-blue-400 bg-slate-800" : "text-slate-400 hover:text-slate-300"}`}
 					>
 						<span className="text-lg">{item.icon}</span>
-						<span className={pathname === item.path ? 'text-blue-600' : 'text-gray-700'}>{item.label}</span>
+						<span className={pathname === item.path ? 'text-blue-400' : 'text-slate-400 hover:text-slate-300'}>{item.label}</span>
 						{item.path === '/explore' && counts && (
-							<span className="text-[10px] text-gray-400">{counts.support}▲ {counts.oppose}▼</span>
+							<span className="text-[10px] text-slate-500 font-semibold mt-0.5">{counts.support}+ {counts.oppose}−</span>
 						)}
 					</button>
 				))}

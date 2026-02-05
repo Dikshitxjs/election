@@ -67,21 +67,21 @@ export default function ChhetraPage({ params }: Props) {
   const uniqueParties = Array.from(new Set(candidates.map((c) => c.party)));
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-slate-950">
       {/* Header */}
-      <div className="bg-white border-b shadow-sm sticky top-0 z-40">
+      <div className="bg-slate-900 border-b border-slate-800 shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-6 sm:py-8">
           <button
             onClick={() => router.push("/explore")}
-            className="text-blue-600 hover:text-blue-800 text-sm font-semibold mb-3 flex items-center gap-1 transition"
+            className="text-blue-400 hover:text-blue-300 text-sm font-bold mb-3 flex items-center gap-1 transition"
           >
-            ← Back to Explore
+            ← Back to Districts
           </button>
           <div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
-              📍 {chhetraName}
+            <h1 className="text-3xl sm:text-4xl font-black text-white">
+              {chhetraName}
             </h1>
-            <p className="text-gray-600 mt-1">
+            <p className="text-slate-400 mt-1 font-semibold">
               {chhetraRegion} • {candidates.length} candidate{candidates.length !== 1 ? "s" : ""}
             </p>
           </div>
@@ -91,47 +91,47 @@ export default function ChhetraPage({ params }: Props) {
       <main className="max-w-4xl mx-auto px-4 py-6 sm:py-8 space-y-6">
         {/* Loading State */}
         {loading && (
-          <div className="bg-white rounded-2xl p-12 text-center">
-            <div className="inline-block animate-spin mb-3 text-3xl">⏳</div>
-            <p className="text-gray-600 font-semibold">Loading candidates...</p>
+          <div className="bg-slate-800 rounded-2xl p-12 text-center border border-slate-700">
+            <div className="inline-block animate-spin mb-3 text-3xl">...</div>
+            <p className="text-slate-300 font-semibold">Loading candidates...</p>
           </div>
         )}
 
         {/* Error State */}
         {error && (
-          <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-6 text-center">
-            <p className="text-red-700 font-bold text-lg">❌ Error</p>
-            <p className="text-red-600 mt-2">{error}</p>
+          <div className="bg-rose-900/30 border border-rose-700 rounded-2xl p-6 text-center">
+            <p className="text-rose-300 font-bold text-lg">Error</p>
+            <p className="text-rose-200 mt-2 font-semibold">{error}</p>
           </div>
         )}
 
         {/* Filter Bar */}
         {!loading && !error && candidates.length > 0 && (
-          <div className="bg-white rounded-2xl border shadow-sm p-4 sm:p-6 space-y-4">
+          <div className="bg-slate-800 rounded-2xl border border-slate-700 shadow-sm p-4 sm:p-6 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Search */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  🔍 Search
+                <label className="block text-sm font-bold text-slate-200 mb-2">
+                  Search
                 </label>
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search by name..."
-                  className="w-full p-3 border-2 border-gray-200 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none transition"
+                  className="w-full p-3 border border-slate-700 rounded-lg bg-slate-900 text-slate-200 placeholder-slate-500 font-semibold focus:border-blue-500 focus:outline-none transition hover:border-slate-600"
                 />
               </div>
 
               {/* Party Filter */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  🏛️ Party
+                <label className="block text-sm font-bold text-slate-200 mb-2">
+                  Party
                 </label>
                 <select
                   value={selectedParty}
                   onChange={(e) => setSelectedParty(e.target.value)}
-                  className="w-full p-3 border-2 border-gray-200 rounded-lg bg-white text-gray-900 font-medium focus:border-blue-500 focus:outline-none transition"
+                  className="w-full p-3 border border-slate-700 rounded-lg bg-slate-900 text-slate-200 font-semibold focus:border-blue-500 focus:outline-none transition hover:border-slate-600"
                 >
                   <option value="all">All Parties ({uniqueParties.length})</option>
                   {uniqueParties.map((p) => (
@@ -151,9 +151,9 @@ export default function ChhetraPage({ params }: Props) {
                   setSelectedParty("all");
                 }}
                 variant="outline"
-                className="w-full text-gray-700 border-gray-300"
+                className="w-full text-slate-200 border-slate-600 hover:bg-slate-700"
               >
-                ✕ Clear Filters
+                × Clear Filters
               </Button>
             )}
           </div>
@@ -161,17 +161,17 @@ export default function ChhetraPage({ params }: Props) {
 
         {/* Empty State */}
         {!loading && !error && candidates.length === 0 && (
-          <div className="bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-8 text-center">
-            <p className="text-yellow-800 text-lg font-semibold">No candidates found in this chhetra</p>
-            <p className="text-yellow-700 text-sm mt-2">Please try another chhetra</p>
+          <div className="bg-amber-900/30 border border-amber-700 rounded-2xl p-8 text-center">
+            <p className="text-amber-300 text-lg font-bold">No candidates found in this district</p>
+            <p className="text-amber-200 text-sm mt-2 font-semibold">Please try another district</p>
           </div>
         )}
 
         {/* No Results */}
         {!loading && !error && candidates.length > 0 && filteredCandidates.length === 0 && (
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-8 text-center">
-            <p className="text-blue-800 text-lg font-semibold">No candidates match your filters</p>
-            <p className="text-blue-700 text-sm mt-2">Try adjusting your search or party filter</p>
+          <div className="bg-blue-900/30 border border-blue-700 rounded-2xl p-8 text-center">
+            <p className="text-blue-300 text-lg font-bold">No candidates match your filters</p>
+            <p className="text-blue-200 text-sm mt-2 font-semibold">Try adjusting your search or party filter</p>
           </div>
         )}
 
@@ -190,10 +190,10 @@ export default function ChhetraPage({ params }: Props) {
             </div>
 
             {/* Results Summary */}
-            <div className="bg-white rounded-2xl border p-4 sm:p-6 text-center">
-              <p className="text-gray-600">
-                Showing <span className="font-bold text-gray-900">{filteredCandidates.length}</span> of{" "}
-                <span className="font-bold text-gray-900">{candidates.length}</span> candidates
+            <div className="bg-slate-800 rounded-2xl border border-slate-700 p-4 sm:p-6 text-center">
+              <p className="text-slate-300 font-semibold">
+                Showing <span className="font-black text-blue-400">{filteredCandidates.length}</span> of{" "}
+                <span className="font-black text-blue-400">{candidates.length}</span> candidates
               </p>
             </div>
           </div>
@@ -204,16 +204,16 @@ export default function ChhetraPage({ params }: Props) {
           <div className="flex flex-col sm:flex-row gap-3">
             <Button
               onClick={() => router.push("/explore")}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition"
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition"
             >
-              🔍 Explore All Chhetras
+              Explore All Districts
             </Button>
             <Button
               onClick={() => router.push("/")}
               variant="outline"
-              className="flex-1 border-2 border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold py-3 rounded-lg transition"
+              className="flex-1 border border-slate-700 text-slate-200 hover:bg-slate-700 font-bold py-3 rounded-lg transition"
             >
-              🏠 Home
+              Home
             </Button>
           </div>
         )}

@@ -103,43 +103,33 @@ export default function ExplorePage() {
     setSearchQuery("");
   };
 
+  // Get total votes for display
+  const totalVotes = candidates.reduce((sum, c) => sum + (c.supportCount || 0) + (c.opposeCount || 0), 0);
+
   // ---------------- UI ----------------
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-slate-950">
       {/* Header */}
-      <div className="bg-white border-b shadow-sm sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 py-4 sm:py-6">
-          <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-                Explore Candidates
-              </h1>
-              <p className="text-sm sm:text-base text-gray-600 mt-1">
-                Browse and vote for candidates in your chhetra
-              </p>
-            </div>
-
-            <Button
-              onClick={() => setShowChhetraSelector(true)}
-              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              📍 Find Your Chhetra
-            </Button>
-          </div>
+      <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-40 shadow-lg">
+        <div className="px-4 py-3 sm:px-6 sm:py-4">
+          <h1 className="text-2xl sm:text-3xl font-black text-white">Candidates</h1>
+          <p className="text-xs sm:text-sm text-slate-400 mt-1">View all candidates and cast your vote</p>
         </div>
-      </div>
+      </header>
 
-      {/* Mobile / Desktop Chhetra Selector Modal */}
+      {/* Chhetra Selector Modal - Improved UX */}
       {showChhetraSelector && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center p-4 animate-in">
-          <div className="bg-white w-full md:max-w-xl rounded-t-3xl md:rounded-2xl p-6 max-h-[80vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center p-0 md:p-4 animate-in fade-in">
+          <div className="bg-slate-900 w-full md:max-w-lg rounded-t-2xl md:rounded-2xl p-4 sm:p-6 max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-800">
+            {/* Close Button */}
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-gray-900">Select Your Chhetra</h2>
+              <h2 className="text-xl sm:text-2xl font-black text-white">Select District</h2>
               <button
                 onClick={() => setShowChhetraSelector(false)}
-                className="text-gray-500 hover:text-gray-700 text-2xl"
+                className="p-2 hover:bg-slate-800 rounded-lg transition text-slate-400 font-bold text-xl w-8 h-8 flex items-center justify-center"
+                title="Close"
               >
-                ✕
+                ×
               </button>
             </div>
             <ChhetraSelector
@@ -155,35 +145,40 @@ export default function ExplorePage() {
         </div>
       )}
 
-      <main className="max-w-7xl mx-auto px-4 py-6 sm:py-8 space-y-6">
-        {/* Filters Section */}
-        <div className="bg-white rounded-2xl border shadow-sm p-4 sm:p-6 space-y-4">
-          <div className="grid grid-cols-1 gap-4">
-            {/* Search Bar */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                🔍 Search Candidates
-              </label>
-              <SearchBar
-                value={searchQuery}
-                onChange={setSearchQuery}
-                placeholder="Search by name, party..."
-              />
-            </div>
+      <main className="px-4 sm:px-6 py-4 sm:py-6 max-w-6xl mx-auto pb-24">
+        {/* Search Bar - Mobile First */}
+        <div className="mb-4 sm:mb-6">
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search candidates..."
+          />
+        </div>
 
-            {/* Filters Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Filters - Mobile Optimized */}
+        <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-5 mb-4 sm:mb-6 shadow-sm">
+          <div className="space-y-3 sm:space-y-4">
+            {/* Find Your Chhetra Button */}
+            <button
+              onClick={() => setShowChhetraSelector(true)}
+              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 rounded-lg transition shadow-md hover:shadow-lg text-sm sm:text-base"
+            >
+              📍 Find Your Chhetra
+            </button>
+
+            {/* Filters Grid - Mobile First */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {/* Chhetra Filter */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  📍 Chhetra
+                <label className="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">
+                  Chhetra
                 </label>
                 <select
                   value={selectedChhetra === "all" ? "all" : selectedChhetra.toString()}
                   onChange={(e) => setSelectedChhetra(e.target.value === "all" ? "all" : Number(e.target.value))}
-                  className="w-full p-3 border-2 border-gray-200 rounded-lg bg-white text-gray-900 font-medium focus:border-blue-500 focus:outline-none transition"
+                  className="w-full p-2.5 border-2 border-gray-300 rounded-lg bg-white text-sm font-semibold focus:border-blue-500 focus:outline-none transition"
                 >
-                  <option value="all">All Chhetras ({chhetras.length})</option>
+                  <option value="all">All ({chhetras.length})</option>
                   {chhetras.map((ch) => (
                     <option key={ch.id} value={ch.id}>
                       {ch.name}
@@ -194,15 +189,15 @@ export default function ExplorePage() {
 
               {/* Party Filter */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  🏛️ Party
+                <label className="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">
+                  Party
                 </label>
                 <select
                   value={selectedParty}
                   onChange={(e) => setSelectedParty(e.target.value)}
-                  className="w-full p-3 border-2 border-gray-200 rounded-lg bg-white text-gray-900 font-medium focus:border-blue-500 focus:outline-none transition"
+                  className="w-full p-2.5 border-2 border-gray-300 rounded-lg bg-white text-sm font-semibold focus:border-blue-500 focus:outline-none transition"
                 >
-                  <option value="all">All Parties ({uniqueParties.length})</option>
+                  <option value="all">All ({uniqueParties.length})</option>
                   {uniqueParties.map((p) => (
                     <option key={p} value={p}>
                       {p}
@@ -212,68 +207,64 @@ export default function ExplorePage() {
               </div>
             </div>
 
-            {/* Clear Filters Button */}
+            {/* Clear Filters Button - Red Text */}
             {(selectedChhetra !== "all" || selectedParty !== "all" || searchQuery.trim()) && (
-              <Button
+              <button
                 onClick={clearAllFilters}
-                variant="outline"
-                className="w-full text-gray-700 border-gray-300 hover:bg-gray-100"
+                className="w-full py-2.5 px-4 border-2 border-red-300 hover:bg-red-50 text-red-600 font-bold rounded-lg transition text-sm sm:text-base"
               >
-                ✕ Clear All Filters
-              </Button>
+                ✕ Clear Filters
+              </button>
             )}
           </div>
         </div>
 
-        {/* Results Summary */}
+        {/* Stats Bar */}
         {!loading && !error && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-4 sm:mb-6">
             <StatCard label="Candidates" value={filteredCandidates.length} />
-            <StatCard
-              label="Chhetras"
-              value={
-                new Set(filteredCandidates.map((c) => c.chhetra_id || c.chhetraId).filter(Boolean)).size
-              }
-            />
+            <StatCard label="Districts" value={new Set(filteredCandidates.map((c) => c.chhetra_id || c.chhetraId).filter(Boolean)).size} />
             <StatCard label="Parties" value={uniqueParties.length} />
-            <StatCard label="Total" value={candidates.length} />
+            <StatCard label="Votes" value={totalVotes} />
           </div>
         )}
 
         {/* Results */}
         {loading ? (
-          <div className="bg-white rounded-2xl p-12 text-center">
-            <div className="inline-block animate-spin mb-3">⏳</div>
-            <p className="text-gray-600">Loading candidates...</p>
+          <div className="bg-slate-900 rounded-lg p-8 sm:p-12 text-center border border-slate-800">
+            <div className="inline-block animate-spin text-3xl mb-3">⏳</div>
+            <p className="text-slate-400 font-medium">Loading candidates...</p>
           </div>
         ) : error ? (
-          <div className="bg-red-50 border border-red-200 rounded-2xl p-6 text-center">
-            <p className="text-red-700 font-semibold">❌ Error</p>
-            <p className="text-red-600 text-sm mt-1">{error}</p>
+          <div className="bg-slate-800 border border-slate-700 rounded-lg p-6 text-center">
+            <p className="text-slate-200 font-bold text-lg">Error Loading</p>
+            <p className="text-slate-400 text-sm mt-2">{error}</p>
           </div>
         ) : grouped.length === 0 ? (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-8 text-center">
-            <p className="text-yellow-800 text-lg font-semibold">No candidates found</p>
-            <p className="text-yellow-700 text-sm mt-1">Try adjusting your filters</p>
+          <div className="bg-slate-800 border border-slate-700 rounded-lg p-6 sm:p-8 text-center">
+            <p className="text-slate-200 font-bold text-lg">No candidates found</p>
+            <p className="text-slate-400 text-sm mt-2">Try adjusting your filters</p>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {grouped.map((g) => (
               <section
                 key={g.chhetra.id}
-                className="bg-white rounded-2xl border shadow-sm overflow-hidden"
+                className="bg-slate-900 rounded-lg border border-slate-800 shadow-lg overflow-hidden"
               >
-                <div className="bg-linear-to-r from-blue-50 to-blue-100 px-4 sm:px-6 py-4 border-b">
-                  <h2 className="font-bold text-lg sm:text-xl text-gray-900">
-                    📍 {g.chhetra.name}
+                {/* District Header */}
+                <div className="bg-slate-800 px-4 sm:px-5 py-3 sm:py-4 border-b border-slate-700">
+                  <h2 className="font-black text-lg sm:text-xl text-white">
+                    {g.chhetra.name}
                   </h2>
-                  <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                  <p className="text-xs sm:text-sm text-slate-400 mt-1 font-medium">
                     {g.candidates.length} candidate{g.candidates.length !== 1 ? "s" : ""}
                   </p>
                 </div>
 
-                <div className="p-4 sm:p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                {/* Candidates Grid */}
+                <div className="p-3 sm:p-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                     {g.candidates.map((c) => (
                       <CandidateCard
                         key={c.id}
@@ -295,9 +286,9 @@ export default function ExplorePage() {
 
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
-    <div className="bg-white p-4 rounded-lg border text-center">
-      <div className="text-2xl font-bold">{value}</div>
-      <div className="text-sm text-gray-600">{label}</div>
+    <div className="bg-slate-800 p-2.5 sm:p-3 rounded-lg border border-slate-700 text-center shadow-md">
+      <div className="text-lg sm:text-2xl font-black text-blue-400">{value}</div>
+      <div className="text-xs sm:text-sm font-semibold text-slate-400 mt-1">{label}</div>
     </div>
   );
 }

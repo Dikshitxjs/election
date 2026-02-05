@@ -53,23 +53,58 @@ export default function VoteActions({ candidateId, initialSupport, initialOppose
     }
   };
 
-  return (
-    <div className="flex gap-3 mt-3">
-      <button
-        onClick={() => vote("support")}
-        disabled={disabled}
-        className={`flex-1 bg-gradient-to-r from-green-500 to-green-600 active:scale-95 transition shadow-md text-white py-3 rounded-xl font-semibold ${disabled ? 'opacity-60 cursor-not-allowed' : ''}`}
-      >
-        ☑ Support ({support})
-      </button>
+  const totalVotes = support + oppose;
+  const supportPercentage = totalVotes > 0 ? Math.round((support / totalVotes) * 100) : 0;
 
-      <button
-        onClick={() => vote("oppose")}
-        disabled={disabled}
-        className={`flex-1 bg-gradient-to-r from-red-500 to-red-600 active:scale-95 transition shadow-md text-white py-3 rounded-xl font-semibold ${disabled ? 'opacity-60 cursor-not-allowed' : ''}`}
-      >
-        ⛔ Don’t ({oppose})
-      </button>
+  return (
+    <div className="space-y-3">
+      {/* Vote Progress Bar */}
+      {totalVotes > 0 && (
+        <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-emerald-500 transition-all duration-300"
+            style={{ width: `${supportPercentage}%` }}
+          />
+        </div>
+      )}
+
+      {/* Vote Buttons */}
+      <div className="flex gap-2.5">
+        <button
+          onClick={() => vote("support")}
+          disabled={disabled}
+          className={`flex-1 py-3 sm:py-3.5 rounded-lg font-bold text-sm sm:text-base transition-all duration-200 flex items-center justify-center gap-1.5 ${
+            disabled
+              ? "bg-slate-700 text-slate-500 cursor-not-allowed"
+              : "bg-emerald-600 hover:bg-emerald-700 text-white shadow-md hover:shadow-lg active:scale-95"
+          }`}
+          title={disabled ? "Vote already cast" : "Vote support"}
+        >
+          <span className="text-base">+</span>
+          <span>{support}</span>
+        </button>
+
+        <button
+          onClick={() => vote("oppose")}
+          disabled={disabled}
+          className={`flex-1 py-3 sm:py-3.5 rounded-lg font-bold text-sm sm:text-base transition-all duration-200 flex items-center justify-center gap-1.5 ${
+            disabled
+              ? "bg-slate-700 text-slate-500 cursor-not-allowed"
+              : "bg-rose-600 hover:bg-rose-700 text-white shadow-md hover:shadow-lg active:scale-95"
+          }`}
+          title={disabled ? "Vote already cast" : "Vote oppose"}
+        >
+          <span className="text-base">-</span>
+          <span>{oppose}</span>
+        </button>
+      </div>
+
+      {/* Voted Badge */}
+      {disabled && (
+        <div className="text-center py-2 px-3 bg-slate-800 rounded-lg border border-slate-700">
+          <p className="text-xs sm:text-sm font-bold text-blue-400">Vote recorded</p>
+        </div>
+      )}
     </div>
   );
 }

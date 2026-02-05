@@ -44,66 +44,66 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-white border-b shadow-sm">
-        <div className="max-w-4xl mx-auto px-4 py-4">
-          <h1 className="text-2xl font-bold text-gray-900">Contact</h1>
-          <p className="text-gray-900 mt-1">
-            If you could not find your chhetra number, tell us here and include your email so we can reply.
+    <div className="min-h-screen bg-slate-950">
+      <div className="bg-slate-900 border-b border-slate-800 shadow-sm">
+        <div className="max-w-4xl mx-auto px-4 py-6 sm:py-8">
+          <h1 className="text-2xl sm:text-3xl font-black text-white">Contact</h1>
+          <p className="text-slate-400 mt-2 font-semibold">
+            If you couldn't find your district number, let us know and we'll help you.
           </p>
         </div>
       </div>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <div className="bg-white p-6 rounded-xl border">
-          <h2 className="text-lg font-semibold text-gray-900 mb-3">Can't find your chhetra?</h2>
+        <div className="bg-slate-800 p-6 sm:p-8 rounded-xl border border-slate-700">
+          <h2 className="text-lg font-bold text-slate-200 mb-4">Can't find your district?</h2>
 
           {submitted ? (
-            <div className="p-4 bg-green-50 border border-green-100 rounded">
-              <p className="text-green-800">
+            <div className="p-4 bg-emerald-900/30 border border-emerald-700 rounded-lg">
+              <p className="text-emerald-200 font-semibold">
                 Thanks — your request was received. We'll reply to the email you provided.
               </p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-900">Your name (optional)</label>
+                <label className="block text-sm font-bold text-slate-200 mb-2">Your name (optional)</label>
                 <input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded mt-2"
+                  className="w-full p-3.5 border border-slate-700 rounded-lg bg-slate-900 text-slate-200 placeholder-slate-500 font-semibold focus:border-blue-500 focus:outline-none hover:border-slate-600 transition"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-900">Your email</label>
+                <label className="block text-sm font-bold text-slate-200 mb-2">Your email</label>
                 <input
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"
-                  className="w-full p-3 border border-gray-300 rounded mt-2"
+                  className="w-full p-3.5 border border-slate-700 rounded-lg bg-slate-900 text-slate-200 placeholder-slate-500 font-semibold focus:border-blue-500 focus:outline-none hover:border-slate-600 transition"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-900">Message</label>
+                <label className="block text-sm font-bold text-slate-200 mb-2">Message</label>
                 <textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   rows={6}
-                  className="w-full p-3 border border-gray-300 rounded mt-2"
-                  placeholder="Describe which chhetra you couldn't find and any details."
+                  className="w-full p-3.5 border border-slate-700 rounded-lg bg-slate-900 text-slate-200 placeholder-slate-500 font-semibold focus:border-blue-500 focus:outline-none hover:border-slate-600 transition resize-none"
+                  placeholder="Describe which district you couldn't find and any details."
                   required
                 />
               </div>
 
-              {error && <div className="text-red-700">{error}</div>}
+              {error && <div className="text-rose-300 font-semibold bg-rose-900/30 p-3 rounded-lg border border-rose-700">{error}</div>}
 
               <div>
                 <button
                   disabled={submitting}
-                  className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-60"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-bold disabled:opacity-60 transition"
                 >
                   {submitting ? "Sending..." : "Send Request"}
                 </button>

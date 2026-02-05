@@ -70,16 +70,16 @@ export default function ChhetraFilter({
 
   return (
     <div className={`chhetra-filter ${className}`} ref={dropdownRef}>
-      <label className="block text-sm font-medium text-gray-900 mb-2">{label}</label>
+      <label className="block text-sm font-bold text-slate-200 mb-3">{label}</label>
 
       {/* Desktop Dropdown */}
       <div className="hidden md:block">
         <select
           value={selectedChhetra}
           onChange={(e) => onChhetraChange(e.target.value)}
-          className="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full p-3.5 border border-slate-700 rounded-lg bg-slate-800 text-slate-100 font-semibold focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-slate-600 transition"
         >
-          {showAllOption && <option value="all">All Chhetras</option>}
+          {showAllOption && <option value="all">All Districts</option>}
           {chhetras.map((c) => (
             <option key={c.id} value={c.id.toString()}>
               {c.name} — {c.region}
@@ -98,11 +98,11 @@ export default function ChhetraFilter({
           aria-haspopup="listbox"
           onClick={() => (isOpen ? setIsOpen(false) : openAndInit())}
           onKeyDown={handleKeyDown}
-          className="w-full p-3 border border-gray-300 rounded-lg bg-white flex items-center justify-between text-gray-800"
+          className="w-full p-3.5 border border-slate-700 rounded-lg bg-slate-800 flex items-center justify-between text-slate-200 font-semibold hover:border-slate-600 transition"
         >
           <span className="truncate">{selectedChhetraName}</span>
           <svg
-            className={`w-5 h-5 text-gray-500 transition-transform ${isOpen ? "rotate-180" : ""}`}
+            className={`w-5 h-5 text-slate-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -117,18 +117,18 @@ export default function ChhetraFilter({
             role="listbox"
             tabIndex={-1}
             onKeyDown={handleKeyDown}
-            className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-y-auto"
+            className="absolute z-20 mt-2 w-full bg-slate-800 border border-slate-700 rounded-lg shadow-lg max-h-64 overflow-y-auto"
           >
             {showAllOption && (
               <button
                 role="option"
                 aria-selected={selectedChhetra === "all"}
                 onClick={() => handleSelect("all")}
-                className={`w-full text-left px-4 py-3 hover:bg-blue-50 rounded-t-lg ${
-                  selectedChhetra === "all" ? "bg-blue-50 text-blue-700" : ""
+                className={`w-full text-left px-4 py-3.5 hover:bg-slate-700 rounded-t-lg transition font-semibold ${
+                  selectedChhetra === "all" ? "bg-blue-600 text-white" : "text-slate-200"
                 }`}
               >
-                All Chhetras
+                All Districts
               </button>
             )}
 
@@ -142,12 +142,12 @@ export default function ChhetraFilter({
                   aria-selected={isSelected}
                   onClick={() => handleSelect(ch.id.toString())}
                   onMouseEnter={() => setHighlightedIndex(idx)}
-                  className={`w-full text-left px-4 py-3 hover:bg-blue-50 border-t border-gray-100 ${
-                    isSelected ? "bg-blue-50 text-blue-700" : ""
-                  } ${isHighlighted ? "bg-gray-100" : ""}`}
+                  className={`w-full text-left px-4 py-3.5 hover:bg-slate-700 border-t border-slate-700 transition font-semibold ${
+                    isSelected ? "bg-blue-600 text-white" : "text-slate-200"
+                  } ${isHighlighted ? "bg-slate-700" : ""}`}
                 >
-                  <div className="font-medium text-gray-900">{ch.name}</div>
-                  <div className="text-sm text-gray-500">{ch.region} Region</div>
+                  <div className="font-black text-base">{ch.name}</div>
+                  <div className="text-xs font-medium text-slate-400 mt-1">{ch.region} Region</div>
                 </button>
               );
             })}
@@ -156,11 +156,11 @@ export default function ChhetraFilter({
       </div>
 
       {selectedChhetra !== "all" && (
-        <div className="mt-2 flex items-center justify-between">
-          <div className="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+        <div className="mt-3 flex items-center justify-between">
+          <div className="inline-flex items-center bg-blue-600 text-white px-3.5 py-2 rounded-lg text-sm font-bold">
             {selectedChhetraName}
           </div>
-          <button onClick={() => onChhetraChange("all")} className="text-sm text-gray-500 hover:text-gray-700">
+          <button onClick={() => onChhetraChange("all")} className="text-sm text-slate-400 hover:text-slate-300 font-semibold transition">
             Clear
           </button>
         </div>

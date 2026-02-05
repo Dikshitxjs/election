@@ -7,7 +7,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-gray-50 text-gray-900">
+      <body className="bg-slate-950 text-slate-200">
         <div className="min-h-screen pb-16">
           {children}
         </div>
