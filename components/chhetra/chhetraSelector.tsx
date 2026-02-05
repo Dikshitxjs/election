@@ -3,56 +3,104 @@
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api";
 
+interface Chhetra {
+  id: number;
+  name: string;
+  region: string;
+  candidateCount?: number;
+}
+
+interface Props {
+  selectedChhetraId?: number;
+  onSelectChhetra: (id: number) => void;
+}
+
 export default function ChhetraSelector({
   selectedChhetraId,
   onSelectChhetra,
-}: {
-  selectedChhetraId?: string;
-  onSelectChhetra: (id: string) => void;
-}) {
-  const [chhetras, setChhetras] = useState<any[]>([]);
+}: Props) {
+  const [chhetras, setChhetras] = useState<Chhetra[]>([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    apiFetch("/chhetras").then(setChhetras);
+    const fetchChhetras = async () => {
+      try {
+        const data = await apiFetch<Chhetra[]>("/chhetras");
+        setChhetras(data || []);
+      } catch (error) {
+        console.error("Error fetching chhetras:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchChhetras();
   }, []);
 
-  const filtered = chhetras.filter((c) => c.name.toLowerCase().includes(search.toLowerCase()));
+  const filtered = chhetras.filter((c) =>
+    c.name.toLowerCase().includes(search.toLowerCase()) ||
+    c.region.toLowerCase().includes(search.toLowerCase())
+  );
+
+  if (loading) {
+    return <div className="p-4 text-center text-gray-500">Loading chhetras...</div>;
+  }
 
   return (
-    <div className="fixed inset-0 bg-white z-50 flex flex-col">
-      <div className="p-4 border-b flex justify-between items-center">
-        <h2 className="font-bold text-lg">Select Your Chhetra</h2>
-      </div>
-
-      <div className="p-4">
+    <div className="w-full max-h-[80vh] overflow-y-auto">
+      {/* 📍 Search Input */}
+      <div className="sticky top-0 bg-white z-10 mb-4">
         <input
-          placeholder="Search Chhetra..."
+          autoFocus
+          placeholder="🔍 Search chhetra by name or region..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full p-3 sm:p-4 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition bg-gray-50"
         />
+        <p className="text-xs text-gray-600 mt-2 px-3">
+          Total: {filtered.length} chhetra{filtered.length !== 1 ? "s" : ""}
+        </p>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 space-y-2">
-        {filtered.map((c) => {
-          const isSelected = selectedChhetraId === c.id.toString();
-          return (
-            <button
-              key={c.id}
-              onClick={() => onSelectChhetra(c.id.toString())}
-              className={`w-full text-left p-4 rounded-xl border transition ${
-                isSelected
-                  ? "bg-blue-50 text-blue-800 border-blue-300"
-                  : "bg-gray-50 border-gray-200 hover:bg-blue-50"
-              }`}
-            >
-              <p className="font-semibold text-gray-900">{c.name}</p>
-              <p className="text-sm text-gray-500">Chhetra {c.id}</p>
-            </button>
-          );
-        })}
-      </div>
+      {/* 📍 Chhetra List */}
+      {filtered.length === 0 ? (
+        <div className="p-6 text-center text-gray-500">
+          <p className="text-sm">No chhetras found matching "{search}"</p>
+        </div>
+      ) : (
+        <div className="space-y-2 px-0">
+          {filtered.map((c) => {
+            const active = selectedChhetraId === c.id;
+            return (
+              <button
+                key={c.id}
+                onClick={() => {
+                  onSelectChhetra(c.id);
+                }}
+                className={`w-full text-left p-4 rounded-lg transition-all duration-200 border-2 ${
+                  active
+                    ? "bg-blue-600 text-white border-blue-600 shadow-lg"
+                    : "bg-white hover:bg-blue-50 border-gray-200 hover:border-blue-300 text-gray-900"
+                }`}
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex-1 min-w-0">
+                    <p className={`font-bold text-base sm:text-lg ${active ? "text-white" : "text-gray-900"}`}>
+                      📍 {c.name}
+                    </p>
+                    <p className={`text-sm mt-1 ${active ? "text-blue-100" : "text-gray-600"}`}>
+                      {c.region} • {c.candidateCount || 0} candidate{(c.candidateCount || 0) !== 1 ? "s" : ""}
+                    </p>
+                  </div>
+                  {active && (
+                    <div className="ml-2 text-white text-xl shrink-0">✓</div>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

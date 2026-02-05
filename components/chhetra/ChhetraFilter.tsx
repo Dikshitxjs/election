@@ -5,11 +5,10 @@ import { Chhetra } from "@/types/candidate";
 
 interface ChhetraFilterProps {
   chhetras: Chhetra[];
-  selectedChhetra: string;
-  onChhetraChange: (chhetraId: string) => void;
+  selectedChhetra: number | "all";
+  onChhetraChange: (chhetraId: number | "all") => void;
   showAllOption?: boolean;
   label?: string;
-  className?: string;
 }
 
 export default function ChhetraFilter({
@@ -17,19 +16,15 @@ export default function ChhetraFilter({
   selectedChhetra,
   onChhetraChange,
   showAllOption = true,
-  label = "Filter by Chhetra",
-  className = "",
+  label = "📍 Filter by Chhetra",
 }: ChhetraFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const listId = "chhetra-filter-list";
 
   const selectedChhetraName =
     selectedChhetra === "all"
       ? "All Chhetras"
-      : chhetras.find((c) => c.id === Number(selectedChhetra))?.name ??
-        `Chhetra ${selectedChhetra}`;
+      : chhetras.find((c) => c.id === selectedChhetra)?.name ?? `Chhetra ${selectedChhetra}`;
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -41,68 +36,38 @@ export default function ChhetraFilter({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
-  const handleSelect = (value: string) => {
+  const handleSelect = (value: number | "all") => {
     onChhetraChange(value);
     setIsOpen(false);
   };
 
-  const openAndInit = () => {
-    setIsOpen(true);
-    const idx = chhetras.findIndex((c) => c.id === Number(selectedChhetra));
-    setHighlightedIndex(idx >= 0 ? idx : 0);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!isOpen && ["ArrowDown", "Enter", " "].includes(e.key)) {
-      e.preventDefault();
-      openAndInit();
-      return;
-    }
-    if (e.key === "Escape") setIsOpen(false);
-    if (e.key === "ArrowDown")
-      setHighlightedIndex((prev) => (prev === null ? 0 : Math.min(prev + 1, chhetras.length - 1)));
-    if (e.key === "ArrowUp")
-      setHighlightedIndex((prev) => (prev === null ? chhetras.length - 1 : Math.max(prev - 1, 0)));
-    if (e.key === "Enter" && highlightedIndex !== null) {
-      handleSelect(chhetras[highlightedIndex].id.toString());
-    }
-  };
-
   return (
-    <div className={`chhetra-filter ${className}`} ref={dropdownRef}>
-      <label className="block text-sm font-medium text-gray-900 mb-2">{label}</label>
+    <div ref={dropdownRef} className="relative w-full">
+      <label className="block text-sm font-semibold text-gray-700 mb-2">{label}</label>
 
-      {/* Desktop Dropdown */}
-      <div className="hidden md:block">
-        <select
-          value={selectedChhetra}
-          onChange={(e) => onChhetraChange(e.target.value)}
-          className="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-        >
-          {showAllOption && <option value="all">All Chhetras</option>}
-          {chhetras.map((c) => (
-            <option key={c.id} value={c.id.toString()}>
-              {c.name} — {c.region}
-            </option>
-          ))}
-        </select>
-      </div>
+      {/* Desktop Select */}
+      <select
+        value={selectedChhetra === "all" ? "all" : selectedChhetra.toString()}
+        onChange={(e) => handleSelect(e.target.value === "all" ? "all" : Number(e.target.value))}
+        className="hidden sm:block w-full p-3 border-2 border-gray-200 rounded-lg bg-white text-gray-900 font-medium focus:border-blue-500 focus:outline-none transition cursor-pointer hover:border-gray-300"
+      >
+        {showAllOption && <option value="all">All Chhetras ({chhetras.length})</option>}
+        {chhetras.map((ch) => (
+          <option key={ch.id} value={ch.id}>
+            {ch.name} — {ch.region}
+          </option>
+        ))}
+      </select>
 
-      {/* Mobile Dropdown */}
-      <div className="md:hidden relative">
+      {/* Mobile Button with Dropdown */}
+      <div className="block sm:hidden">
         <button
-          id={`${listId}-button`}
-          type="button"
-          aria-expanded={isOpen}
-          aria-controls={listId}
-          aria-haspopup="listbox"
-          onClick={() => (isOpen ? setIsOpen(false) : openAndInit())}
-          onKeyDown={handleKeyDown}
-          className="w-full p-3 border border-gray-300 rounded-lg bg-white flex items-center justify-between text-gray-800"
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-full p-3 border-2 border-gray-200 rounded-lg bg-white text-gray-900 font-medium hover:border-blue-300 transition flex items-center justify-between"
         >
           <span className="truncate">{selectedChhetraName}</span>
           <svg
-            className={`w-5 h-5 text-gray-500 transition-transform ${isOpen ? "rotate-180" : ""}`}
+            className={`w-5 h-5 text-gray-500 transition-transform shrink-0 ml-2 ${isOpen ? "rotate-180" : ""}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -111,60 +76,39 @@ export default function ChhetraFilter({
           </svg>
         </button>
 
+        {/* Dropdown Menu */}
         {isOpen && (
-          <div
-            id={listId}
-            role="listbox"
-            tabIndex={-1}
-            onKeyDown={handleKeyDown}
-            className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-y-auto"
-          >
+          <div className="absolute top-full left-0 right-0 z-50 mt-2 bg-white border-2 border-gray-200 rounded-lg shadow-xl overflow-y-auto max-h-64">
             {showAllOption && (
               <button
-                role="option"
-                aria-selected={selectedChhetra === "all"}
                 onClick={() => handleSelect("all")}
-                className={`w-full text-left px-4 py-3 hover:bg-blue-50 rounded-t-lg ${
-                  selectedChhetra === "all" ? "bg-blue-50 text-blue-700" : ""
+                className={`w-full text-left px-4 py-3 border-b border-gray-100 transition ${
+                  selectedChhetra === "all"
+                    ? "bg-blue-100 text-blue-900 font-semibold"
+                    : "hover:bg-gray-50 text-gray-900"
                 }`}
               >
-                All Chhetras
+                <p className="font-semibold">All Chhetras ({chhetras.length})</p>
               </button>
             )}
 
-            {chhetras.map((ch, idx) => {
-              const isSelected = selectedChhetra === ch.id.toString();
-              const isHighlighted = highlightedIndex === idx;
-              return (
-                <button
-                  key={ch.id}
-                  role="option"
-                  aria-selected={isSelected}
-                  onClick={() => handleSelect(ch.id.toString())}
-                  onMouseEnter={() => setHighlightedIndex(idx)}
-                  className={`w-full text-left px-4 py-3 hover:bg-blue-50 border-t border-gray-100 ${
-                    isSelected ? "bg-blue-50 text-blue-700" : ""
-                  } ${isHighlighted ? "bg-gray-100" : ""}`}
-                >
-                  <div className="font-medium text-gray-900">{ch.name}</div>
-                  <div className="text-sm text-gray-500">{ch.region} Region</div>
-                </button>
-              );
-            })}
+            {chhetras.map((ch) => (
+              <button
+                key={ch.id}
+                onClick={() => handleSelect(ch.id)}
+                className={`w-full text-left px-4 py-3 border-b border-gray-100 transition ${
+                  selectedChhetra === ch.id
+                    ? "bg-blue-100 text-blue-900 font-semibold"
+                    : "hover:bg-gray-50 text-gray-900"
+                }`}
+              >
+                <p className="font-semibold">{ch.name}</p>
+                <p className="text-xs text-gray-600">{ch.region}</p>
+              </button>
+            ))}
           </div>
         )}
       </div>
-
-      {selectedChhetra !== "all" && (
-        <div className="mt-2 flex items-center justify-between">
-          <div className="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-            {selectedChhetraName}
-          </div>
-          <button onClick={() => onChhetraChange("all")} className="text-sm text-gray-500 hover:text-gray-700">
-            Clear
-          </button>
-        </div>
-      )}
     </div>
   );
 }

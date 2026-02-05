@@ -2,6 +2,7 @@ export interface Chhetra {
   id: number;
   name: string;
   region: string;
+  candidateCount?: number;
 }
 
 export interface Candidate {
@@ -10,17 +11,19 @@ export interface Candidate {
   party: string;
   partyIcon?: string;
   photo?: string;
-  chhetraId: number;
+  chhetra_id?: number;
+  chhetraId?: number;
   bio?: string;
   supportCount: number;
   opposeCount: number;
+  comments?: Comment[];
   commentsCount?: number;
 }
 
 export interface Comment {
   id: number;
-  candidateId: number;
+  candidateId?: number;
   message: string;
-  sentiment: "support" | "oppose";
-  createdAt: string;
+  sentiment?: "support" | "oppose";
+  createdAt?: string;
 }
