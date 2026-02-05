@@ -75,7 +75,7 @@ export default function ChhetraPage({ params }: Props) {
             onClick={() => router.push("/explore")}
             className="text-blue-400 hover:text-blue-300 text-sm font-bold mb-3 flex items-center gap-1 transition"
           >
-            ← Back to Districts
+            ← Back to Explore
           </button>
           <div>
             <h1 className="text-3xl sm:text-4xl font-black text-white">
@@ -162,8 +162,8 @@ export default function ChhetraPage({ params }: Props) {
         {/* Empty State */}
         {!loading && !error && candidates.length === 0 && (
           <div className="bg-amber-900/30 border border-amber-700 rounded-2xl p-8 text-center">
-            <p className="text-amber-300 text-lg font-bold">No candidates found in this district</p>
-            <p className="text-amber-200 text-sm mt-2 font-semibold">Please try another district</p>
+            <p className="text-amber-300 text-lg font-bold">No candidates found in this constituency</p>
+            <p className="text-amber-200 text-sm mt-2 font-semibold">Please try another constituency</p>
           </div>
         )}
 
@@ -206,7 +206,7 @@ export default function ChhetraPage({ params }: Props) {
               onClick={() => router.push("/explore")}
               className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition"
             >
-              Explore All Districts
+              Explore All Constituencies
             </Button>
             <Button
               onClick={() => router.push("/")}

@@ -123,7 +123,7 @@ export default function ExplorePage() {
           <div className="bg-white w-full md:max-w-lg rounded-t-2xl md:rounded-2xl p-4 sm:p-6 max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200">
             {/* Close Button */}
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Select District</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Select Constituency</h2>
               <button
                 onClick={() => setShowChhetraSelector(false)}
                 className="p-2 hover:bg-gray-100 rounded-lg transition text-gray-600 font-bold text-xl w-8 h-8 flex items-center justify-center"
@@ -161,9 +161,13 @@ export default function ExplorePage() {
             {/* Find Your Chhetra Button */}
             <button
               onClick={() => setShowChhetraSelector(true)}
-              className="w-full bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-semibold py-3 rounded-lg transition shadow-md hover:shadow-lg text-sm sm:text-base"
+              className="w-full bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-semibold py-3 rounded-lg transition shadow-md hover:shadow-lg text-sm sm:text-base flex items-center justify-center gap-2"
             >
-              📍 Find Your Chhetra
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 1118 0z" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <circle cx="12" cy="10" r="2.2" />
+              </svg>
+              Find Your Chhetra
             </button>
 
             {/* Filters Grid - Mobile First */}
@@ -223,7 +227,7 @@ export default function ExplorePage() {
         {!loading && !error && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-4 sm:mb-6">
             <StatCard label="Candidates" value={filteredCandidates.length} />
-            <StatCard label="Districts" value={new Set(filteredCandidates.map((c) => c.chhetra_id || c.chhetraId).filter(Boolean)).size} />
+            <StatCard label="Constituencies" value={new Set(filteredCandidates.map((c) => c.chhetra_id || c.chhetraId).filter(Boolean)).size} />
             <StatCard label="Parties" value={uniqueParties.length} />
             <StatCard label="Votes" value={totalVotes} />
           </div>

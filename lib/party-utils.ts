@@ -3,6 +3,7 @@ export const PARTY_COLORS: Record<string, { bg: string; text: string; border: st
   NC: { bg: "#dbeafe", text: "#1e40af", border: "#60a5fa" },
   RSP: { bg: "#fce7f3", text: "#be185d", border: "#f472b6" },
   CPN: { bg: "#fee2e2", text: "#991b1b", border: "#f87171" },
+  UNP: { bg: "#fff7ed", text: "#c2410c", border: "#fb923c" },
   US: { bg: "#ecfdf5", text: "#065f46", border: "#34d399" },
   // Add more parties as needed
 };
@@ -16,6 +17,8 @@ export const PARTY_ABBREVIATIONS: Record<string, string> = {
   "Communist Party of Nepal": "CPN",
   "Nepali Congress": "NC",
   "Rastriya Swatantra Party": "RSP",
+  "UJyalo Nepal Party": "UNP",
+  "UJyalo Nepal Party (UNP)": "UNP",
   "Unified Socialist": "US",
 };
 

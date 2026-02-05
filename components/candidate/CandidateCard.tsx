@@ -4,6 +4,7 @@ import { useState } from "react";
 import VoteActions from "./VoteActions";
 import Comments from "./Comments";
 import { getPartyFullName } from "@/lib/party-names";
+import { getPartyAbbreviation } from "@/lib/party-utils";
 
 export default function CandidateCard({ candidate, showChhetra = true, showVoteActions = true }: any) {
   const [showComments, setShowComments] = useState(false);
@@ -43,7 +44,11 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
                 }}
               />
               <span className="text-xs sm:text-sm font-medium text-gray-600">
-                {getPartyFullName(candidate.party)} ({candidate.party})
+                {(() => {
+                  const full = getPartyFullName(candidate.party);
+                  const abbr = getPartyAbbreviation(candidate.party);
+                  return `${full} (${abbr})`;
+                })()}
               </span>
             </div>
           </div>

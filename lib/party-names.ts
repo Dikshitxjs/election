@@ -7,7 +7,7 @@ export const PARTY_MAP: Record<string, string> = {
   "PLP": "Pragatisheel Loktantrik Party",
   "RPP": "Rastriya Prajatantra Party",
   "IND": "Independent",
-  "ULP": "Unified Left Party",
+  "ULP": "UJyalo Nepal Party (UNP)",
 };
 
 /**
