@@ -16,6 +16,8 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
   // Build slug variants for filenames the user may have used (spaces, hyphens, lowercase)
   const slug = (s: string) => s.trim();
   const slugHyphen = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-");
+  const slugNoSpace = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "");
+  const slugAlnum = (s: string) => s.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
   const enc = (s: string) => encodeURIComponent(s.trim());
 
   useEffect(() => {
@@ -28,6 +30,12 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
       `/candidates/${slugHyphen(name)}.webp`,
       `/candidates/${slugHyphen(name)}.jpg`,
       `/candidates/${slugHyphen(name)}.png`,
+      `/candidates/${slugNoSpace(name)}.webp`,
+      `/candidates/${slugNoSpace(name)}.jpg`,
+      `/candidates/${slugNoSpace(name)}.png`,
+      `/candidates/${slugAlnum(name)}.webp`,
+      `/candidates/${slugAlnum(name)}.jpg`,
+      `/candidates/${slugAlnum(name)}.png`,
       `/candidates/${slug(name)}.webp`,
       `/candidates/${slug(name)}.jpg`,
       `/candidates/${slug(name)}.png`,
@@ -49,6 +57,12 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
       `/party-badges/${slugHyphen(p)}.svg`,
       `/party-badges/${slugHyphen(p)}.webp`,
       `/party-badges/${slugHyphen(p)}.png`,
+      `/party-badges/${slugNoSpace(p)}.svg`,
+      `/party-badges/${slugNoSpace(p)}.webp`,
+      `/party-badges/${slugNoSpace(p)}.png`,
+      `/party-badges/${slugAlnum(p)}.svg`,
+      `/party-badges/${slugAlnum(p)}.webp`,
+      `/party-badges/${slugAlnum(p)}.png`,
       `/party-badges/${slug(p)}.svg`,
       `/party-badges/${slug(p)}.webp`,
       `/party-badges/${slug(p)}.png`,
@@ -66,6 +80,21 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
 
   const partyBadgeSrc = candidate.partyIcon || `/party-badges/${String(candidate.party).toLowerCase().replace(/\s+/g, "-")}.svg`;
 
+  const pickColor = (s: string) => {
+    const colors = ["#0ea5a4", "#06b6d4", "#7c3aed", "#ef4444", "#f59e0b", "#10b981", "#3b82f6"];
+    let h = 0;
+    for (let i = 0; i < s.length; i++) h = (h << 5) - h + s.charCodeAt(i);
+    return colors[Math.abs(h) % colors.length];
+  };
+
+  const splitNameLines = (name: string) => {
+    if (!name) return ["",""];
+    const parts = name.trim().split(/\s+/);
+    if (parts.length <= 2) return [parts.slice(0, 1).join(' '), parts.slice(1).join(' ')];
+    const mid = Math.ceil(parts.length / 2);
+    return [parts.slice(0, mid).join(' '), parts.slice(mid).join(' ')];
+  };
+
   // Calculate total votes for percentage
   const totalVotes = (candidate.supportCount || 0) + (candidate.opposeCount || 0);
   const supportPercentage = totalVotes > 0 ? Math.round(((candidate.supportCount || 0) / totalVotes) * 100) : 0;
@@ -78,12 +107,26 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
           {/* Photo */}
           <div className="shrink-0">
             {usePlaceholder ? (
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-md ring-1 ring-gray-100 shadow-sm bg-gray-200 flex items-center justify-center text-gray-800 font-bold">
-                {/* SVG-like initials + name */}
-                <div className="text-center">
-                  <div className="text-lg sm:text-xl">{(candidate.name || displayName || "?").split(" ").map(s=>s[0]||"").slice(0,2).join("")}</div>
-                </div>
-              </div>
+              (() => {
+                const nameText = (displayName || candidate.name || "Unknown").trim();
+                const bg = pickColor(nameText);
+                const [l1, l2] = splitNameLines(nameText);
+                return (
+                  <svg
+                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-md ring-1 ring-gray-100 shadow-sm"
+                    viewBox="0 0 100 100"
+                    xmlns="http://www.w3.org/2000/svg"
+                    role="img"
+                  >
+                    <rect width="100" height="100" rx="10" fill={bg} />
+                    <text x="50" y="48" fontFamily="Inter, Arial, sans-serif" fontSize="12" fill="#ffffff" fontWeight="700" textAnchor="middle">
+                      {l1 && <tspan x="50" dy="-6">{l1}</tspan>}
+                      {l2 && <tspan x="50" dy="16">{l2}</tspan>}
+                      {!l2 && !l1 && <tspan x="50" dy="0">{nameText}</tspan>}
+                    </text>
+                  </svg>
+                );
+              })()
             ) : (
               <img
                 src={photoSrc || `/candidates/${candidate.id}.jpg`}
