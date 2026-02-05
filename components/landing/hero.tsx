@@ -18,8 +18,8 @@ export default function Hero() {
         </div>
 
         {/* Main Heading - Professional */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mb-2 leading-tight">
+        <div className="text-center mb-16">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mb-4 leading-tight">
             Nepal Election 2081
           </h1>
           <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto font-normal">
@@ -27,31 +27,11 @@ export default function Hero() {
           </p>
         </div>
 
-        {/* Mahabhidanta Chhetras card - simplified grid */}
-        <div className="mb-8">
-          <div className="border-l-4 border-teal-600 bg-teal-50 rounded-lg p-6 shadow-sm">
-            <div className="flex gap-4 items-start">
-              <div className="shrink-0 w-14 h-14 rounded-lg bg-white flex items-center justify-center text-teal-600 shadow-sm">
-                <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2l3 4h5v2h-1l-1 10H7L6 8H5V6h5L12 2m0 2l-2 2h4l-2-2m0 6h6l1 8H5l1-8h6z" />
-                </svg>
-              </div>
-
-              <div className="flex-1">
-                <h3 className="text-lg font-bold text-slate-900">MahaBhidanta Chhetras</h3>
-                <p className="text-sm text-gray-700 mt-2 leading-relaxed">
-                  This platform features the <strong>most popular constituencies</strong> across Nepal. The candidates and regions listed represent key electoral areas.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* CTA Buttons - two main actions */}
-        <div className="grid grid-cols-2 gap-4 mb-12">
+        <div className="grid grid-cols-2 gap-5 mb-16">
           <button
             onClick={() => router.push("/explore")}
-            className="py-3 px-4 text-base font-semibold rounded-lg bg-teal-600 hover:bg-teal-700 text-white shadow-md hover:shadow-lg transition flex items-center justify-center gap-2"
+            className="py-4 px-6 text-base font-semibold rounded-lg bg-teal-600 hover:bg-teal-700 text-white shadow-md hover:shadow-lg transition flex items-center justify-center gap-2"
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
@@ -61,7 +41,7 @@ export default function Hero() {
 
           <button
             onClick={() => router.push("/explore")}
-            className="py-3 px-4 text-base font-semibold rounded-lg border-2 border-gray-300 text-gray-700 bg-white hover:bg-gray-50 transition flex items-center justify-center gap-2"
+            className="py-4 px-6 text-base font-semibold rounded-lg border-2 border-gray-300 text-gray-700 bg-white hover:bg-gray-50 transition flex items-center justify-center gap-2"
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2c5.33 4.55 8 8.48 8 11.8 0 4.98-3.8 8.2-8 8.2s-8-3.22-8-8.2c0-3.32 2.67-7.25 8-11.8m0 2c-3.35 3-5 6.2-5 9.8 0 3.35 2.57 5.2 5 5.2s5-1.85 5-5.2c0-3.6-1.65-6.8-5-9.8z" />
@@ -71,11 +51,11 @@ export default function Hero() {
         </div>
 
         {/* Disclaimer */}
-        <div className="bg-blue-50 border-l-4 border-blue-600 rounded-lg p-5 mb-8">
-          <div className="flex gap-3">
+        <div className="bg-blue-50 border-l-4 border-blue-600 rounded-lg p-6 mb-10">
+          <div className="flex gap-4">
             <div className="w-6 h-6 flex items-center justify-center shrink-0 text-blue-600 font-bold text-lg">ℹ</div>
             <div>
-              <p className="font-semibold text-blue-900 text-sm mb-1">Disclaimer</p>
+              <p className="font-semibold text-blue-900 text-sm mb-2">Disclaimer</p>
               <p className="text-blue-800 text-sm leading-relaxed">
                 This is a public opinion survey, not an official voting system. Results reflect user sentiment only.
               </p>
@@ -84,8 +64,8 @@ export default function Hero() {
         </div>
 
         {/* Security Note */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 rounded-lg border border-green-300">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-3 px-5 py-3 bg-green-50 rounded-lg border border-green-300">
             <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-1.959 17l-4.5-4.319 1.395-1.435 3.08 2.937 7.021-7.183 1.422 1.409-8.418 8.591z" />
             </svg>
@@ -94,23 +74,23 @@ export default function Hero() {
         </div>
 
         {/* Contact Section - Professional Teal */}
-        <div className="border-l-4 border-teal-600 bg-teal-50 rounded-lg p-7 shadow-sm">
-          <div className="flex gap-4 items-start">
-            <div className="shrink-0 w-12 h-12 rounded-lg bg-white flex items-center justify-center text-teal-600 shadow-sm">
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+        <div className="border-l-4 border-teal-600 bg-teal-50 rounded-lg p-8 shadow-sm">
+          <div className="flex gap-5 items-start">
+            <div className="shrink-0 w-14 h-14 rounded-lg bg-white flex items-center justify-center text-teal-600 shadow-sm">
+              <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
               </svg>
             </div>
 
             <div className="flex-1">
-              <h4 className="font-bold text-slate-900 mb-1">Don't see your constituency?</h4>
-              <p className="text-sm text-gray-700 leading-relaxed mb-4">
+              <h3 className="text-lg font-bold text-slate-900 mb-2">Don't see your constituency?</h3>
+              <p className="text-sm text-gray-700 leading-relaxed mb-6">
                 We're continuously expanding our platform. Contact us to request your region.
               </p>
 
               <button
                 onClick={() => router.push("/contact")}
-                className="py-2 px-6 text-sm font-semibold rounded-lg bg-teal-600 text-white hover:bg-teal-700 transition"
+                className="py-3 px-8 text-sm font-semibold rounded-lg bg-teal-600 text-white hover:bg-teal-700 transition shadow-md hover:shadow-lg"
               >
                 Contact Us
               </button>
