@@ -24,17 +24,24 @@ export default function ChhetraPage({ params }: Props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [candidatesData, chhetraData] = await Promise.all([
-          apiFetch<Candidate[]>(`/chhetra/${params.id}/candidates`),
-          apiFetch<Chhetra>(`/chhetras/${params.id}`),
-        ]).catch(async (err) => {
-          // If chhetra endpoint fails, fetch from chhetras list
-          const chhetras = await apiFetch<Chhetra[]>(`/chhetras/`);
-          const chhetra = chhetras.find((c: any) => c.id === Number(params.id));
-          return [await apiFetch<Candidate[]>(`/chhetra/${params.id}/candidates`), chhetra];
-        });
+        let candidatesData: Candidate[] = [];
+        let chhetraData: Chhetra | undefined;
 
-        setCandidates(candidatesData);
+        try {
+          const [cData, chData] = await Promise.all([
+            apiFetch<Candidate[]>(`/chhetra/${params.id}/candidates`),
+            apiFetch<Chhetra>(`/chhetras/${params.id}`),
+          ]);
+          candidatesData = cData || [];
+          chhetraData = chData;
+        } catch (err) {
+          // Fallback: fetch from chhetras list
+          const chhetras = await apiFetch<Chhetra[]>(`/chhetras/`);
+          chhetraData = chhetras?.find((c: any) => c.id === Number(params.id));
+          candidatesData = await apiFetch<Candidate[]>(`/chhetra/${params.id}/candidates`) || [];
+        }
+
+        setCandidates(candidatesData || []);
         if (chhetraData) {
           setChhetraName(chhetraData.name || "Unknown Chhetra");
           setChhetraRegion(chhetraData.region || "Unknown Region");
