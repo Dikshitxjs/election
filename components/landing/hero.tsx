@@ -47,27 +47,25 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* CTA Buttons - two main actions */}
-        <div className="grid grid-cols-2 gap-5 mb-16">
-          <button
-            onClick={() => router.push("/explore")}
-            className="py-4 px-6 text-base font-semibold rounded-lg bg-teal-600 hover:bg-teal-700 text-white shadow-md hover:shadow-lg transition flex items-center justify-center gap-2"
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M3 13h2v8H3zm4-8h2v16H7zm4-2h2v18h-2zm4 4h2v14h-2zm4-2h2v16h-2z" />
-            </svg>
-            Start Voting
-          </button>
+        {/* CTA Buttons - two main actions (use shared Button for consistent sizing) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-16">
+          <Button onClick={() => router.push("/explore")} className="w-full">
+            <span className="flex items-center gap-2">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M3 13h2v8H3zm4-8h2v16H7zm4-2h2v18h-2zm4 4h2v14h-2zm4-2h2v16h-2z" />
+              </svg>
+              Start Voting
+            </span>
+          </Button>
 
-          <button
-            onClick={() => router.push("/explore")}
-            className="py-4 px-6 text-base font-semibold rounded-lg border-2 border-gray-300 text-gray-700 bg-white hover:bg-gray-50 transition flex items-center justify-center gap-2"
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2c5.33 4.55 8 8.48 8 11.8 0 4.98-3.8 8.2-8 8.2s-8-3.22-8-8.2c0-3.32 2.67-7.25 8-11.8m0 2c-3.35 3-5 6.2-5 9.8 0 3.35 2.57 5.2 5 5.2s5-1.85 5-5.2c0-3.6-1.65-6.8-5-9.8z" />
-            </svg>
-            Explore
-          </button>
+          <Button variant="outline" onClick={() => router.push("/explore")} className="w-full">
+            <span className="flex items-center gap-2 text-center">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2c5.33 4.55 8 8.48 8 11.8 0 4.98-3.8 8.2-8 8.2s-8-3.22-8-8.2c0-3.32 2.67-7.25 8-11.8m0 2c-3.35 3-5 6.2-5 9.8 0 3.35 2.57 5.2 5 5.2s5-1.85 5-5.2c0-3.6-1.65-6.8-5-9.8z" />
+              </svg>
+              Explore
+            </span>
+          </Button>
         </div>
 
         {/* Disclaimer */}
@@ -108,12 +106,7 @@ export default function Hero() {
                 We're continuously expanding our platform. Contact us to request your region.
               </p>
 
-              <button
-                onClick={() => router.push("/contact")}
-                className="py-3 px-8 text-sm font-semibold rounded-lg bg-teal-600 text-white hover:bg-teal-700 transition shadow-md hover:shadow-lg"
-              >
-                Contact Us
-              </button>
+              <Button onClick={() => router.push("/contact")}>Contact Us</Button>
             </div>
           </div>
         </div>

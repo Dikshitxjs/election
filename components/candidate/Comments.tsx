@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { apiFetch } from "@/lib/api";
+import { useFingerprint } from "@/lib/fingerprint";
 
 type LocalComment = { id: number; message: string };
 
 export default function Comments({ candidateId, initialComments }: { candidateId: number; initialComments?: LocalComment[] }) {
   const [comments, setComments] = useState<LocalComment[]>(initialComments || []);
   const [text, setText] = useState("");
+  const { getFingerprint } = useFingerprint();
 
   const submit = async () => {
     if (!text.trim()) return;
@@ -21,14 +23,30 @@ export default function Comments({ candidateId, initialComments }: { candidateId
     setText("");
 
     try {
+      const fingerprint = await getFingerprint().catch(() => undefined);
+      const body: any = { candidateId, message: temp.message };
+      if (fingerprint) body.fingerprint = fingerprint;
+
       const res = await apiFetch("/comments", {
         method: "POST",
-        body: JSON.stringify({ candidateId, message: temp.message }),
+        body,
       });
 
       setComments(res.comments);
     } catch {
       setComments((c: LocalComment[]) => c.filter((x) => x.id !== temp.id));
+    }
+  };
+
+  const share = async () => {
+    try {
+      const fingerprint = await getFingerprint();
+      const url = `${window.location.origin}${window.location.pathname}?asVisitor=${encodeURIComponent(fingerprint)}`;
+      await navigator.clipboard.writeText(url);
+      // small UX: notify user
+      alert("Shareable link copied to clipboard");
+    } catch (e) {
+      alert("Unable to copy share link");
     }
   };
 
@@ -51,12 +69,21 @@ export default function Comments({ candidateId, initialComments }: { candidateId
         placeholder="Share your opinion (anonymous)"
       />
 
-      <button
-        onClick={submit}
-        className="w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg shadow-md active:scale-95 transition font-bold"
-      >
-        Post Comment
-      </button>
+      <div className="flex gap-3 mt-3">
+        <button
+          onClick={submit}
+          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg shadow-md active:scale-95 transition font-bold"
+        >
+          Post Comment
+        </button>
+
+        <button
+          onClick={share}
+          className="px-4 py-2.5 rounded-lg bg-gray-700 hover:bg-gray-600 text-white font-semibold transition"
+        >
+          Share View
+        </button>
+      </div>
     </div>
   );
 }

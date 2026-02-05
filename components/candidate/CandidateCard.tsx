@@ -25,7 +25,7 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
             <img
               src={candidate.photo || `/candidates/${candidate.id}.jpg`}
               alt={candidate.name}
-              className="w-14 h-14 sm:w-16 sm:h-16 rounded-md object-cover ring-1 ring-gray-100 shadow-sm"
+              className="w-16 h-16 sm:w-20 sm:h-20 rounded-md object-cover ring-1 ring-gray-100 shadow-sm"
             />
           </div>
 
@@ -38,18 +38,15 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
               <img
                 src={partyBadgeSrc}
                 alt={candidate.party}
-                className="w-5 h-5 object-contain shrink-0"
+                className="w-6 h-6 sm:w-7 sm:h-7 object-contain shrink-0"
                 onError={(e) => {
                   (e.currentTarget as HTMLImageElement).style.display = 'none';
                 }}
               />
-              <span className="text-xs sm:text-sm font-medium text-gray-600">
-                {(() => {
-                  const full = getPartyFullName(candidate.party);
-                  const abbr = getPartyAbbreviation(candidate.party);
-                  return `${full} (${abbr})`;
-                })()}
-              </span>
+              <div className="flex flex-col leading-tight">
+                <span className="text-xs sm:text-sm font-medium text-gray-700">{getPartyFullName(candidate.party)}</span>
+                <span className="text-[11px] text-gray-500">{getPartyAbbreviation(candidate.party)}</span>
+              </div>
             </div>
           </div>
 

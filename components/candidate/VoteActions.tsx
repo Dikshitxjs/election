@@ -19,6 +19,30 @@ export default function VoteActions({ candidateId, initialSupport, initialOppose
     } catch (e) {}
   }, [candidateId]);
 
+  // If this page is opened with ?asVisitor=<fingerprint>, query the API
+  // to see if that visitor already voted for this candidate and disable UI accordingly.
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const asVisitor = params.get("asVisitor");
+      if (!asVisitor) return;
+
+      (async () => {
+        try {
+          const res: any = await apiFetch(`/votes?candidateId=${candidateId}&fingerprint=${encodeURIComponent(asVisitor)}`);
+          if (res && res.alreadyVoted) {
+            setDisabled(true);
+            // update counts if provided
+            if (typeof res.supportCount === "number") setSupport(res.supportCount);
+            if (typeof res.opposeCount === "number") setOppose(res.opposeCount);
+          }
+        } catch (e) {
+          // ignore
+        }
+      })();
+    } catch (e) {}
+  }, [candidateId]);
+
   const vote = async (type: "support" | "oppose") => {
     if (loading || disabled) return;
     setLoading(true);
