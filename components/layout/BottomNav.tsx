@@ -1,11 +1,10 @@
 "use client";
 
 const navItems = [
-  { label: "Home", path: "/", icon: "⌂" },
-  { label: "Districts", path: "/explore", icon: "◈" },
-  { label: "Contact", path: "/contact", icon: "✉" },
+  { label: "Home", path: "/", icon: "🏠" },
+  { label: "Districts", path: "/explore", icon: "📍" },
+  { label: "Contact", path: "/contact", icon: "📧" },
 ];
-
 
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -26,18 +25,18 @@ export default function BottomNav() {
 	}, []);
 
 	return (
-		<nav className="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 shadow-lg">
+		<nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg">
 			<div className="flex justify-around max-w-md mx-auto">
 				{navItems.map((item) => (
 					<button
 						key={item.path}
 						onClick={() => router.push(item.path)}
-						className={`flex flex-col items-center py-3 text-xs w-full transition font-bold ${pathname === item.path ? "text-blue-400 bg-slate-800" : "text-slate-400 hover:text-slate-300"}`}
+						className={`flex flex-col items-center py-3 text-xs w-full transition font-semibold ${pathname === item.path ? "text-teal-600 bg-gray-50" : "text-gray-500 hover:text-gray-700"}`}
 					>
 						<span className="text-lg">{item.icon}</span>
-						<span className={pathname === item.path ? 'text-blue-400' : 'text-slate-400 hover:text-slate-300'}>{item.label}</span>
+						<span className={pathname === item.path ? 'text-teal-600' : 'text-gray-500 hover:text-gray-700'}>{item.label}</span>
 						{item.path === '/explore' && counts && (
-							<span className="text-[10px] text-slate-500 font-semibold mt-0.5">{counts.support}+ {counts.oppose}−</span>
+							<span className="text-[10px] text-gray-400 font-semibold mt-0.5">{counts.support}+ {counts.oppose}−</span>
 						)}
 					</button>
 				))}

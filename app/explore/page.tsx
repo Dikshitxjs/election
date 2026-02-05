@@ -108,25 +108,25 @@ export default function ExplorePage() {
 
   // ---------------- UI ----------------
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-40 shadow-lg">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
         <div className="px-4 py-3 sm:px-6 sm:py-4">
-          <h1 className="text-2xl sm:text-3xl font-black text-white">Candidates</h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">View all candidates and cast your vote</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Candidates</h1>
+          <p className="text-xs sm:text-sm text-gray-600 mt-1">Browse all candidates and cast your vote</p>
         </div>
       </header>
 
       {/* Chhetra Selector Modal - Improved UX */}
       {showChhetraSelector && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center p-0 md:p-4 animate-in fade-in">
-          <div className="bg-slate-900 w-full md:max-w-lg rounded-t-2xl md:rounded-2xl p-4 sm:p-6 max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-800">
+          <div className="bg-white w-full md:max-w-lg rounded-t-2xl md:rounded-2xl p-4 sm:p-6 max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200">
             {/* Close Button */}
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl sm:text-2xl font-black text-white">Select District</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Select District</h2>
               <button
                 onClick={() => setShowChhetraSelector(false)}
-                className="p-2 hover:bg-slate-800 rounded-lg transition text-slate-400 font-bold text-xl w-8 h-8 flex items-center justify-center"
+                className="p-2 hover:bg-gray-100 rounded-lg transition text-gray-600 font-bold text-xl w-8 h-8 flex items-center justify-center"
                 title="Close"
               >
                 ×
@@ -161,7 +161,7 @@ export default function ExplorePage() {
             {/* Find Your Chhetra Button */}
             <button
               onClick={() => setShowChhetraSelector(true)}
-              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 rounded-lg transition shadow-md hover:shadow-lg text-sm sm:text-base"
+              className="w-full bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-semibold py-3 rounded-lg transition shadow-md hover:shadow-lg text-sm sm:text-base"
             >
               📍 Find Your Chhetra
             </button>
@@ -170,13 +170,13 @@ export default function ExplorePage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {/* Chhetra Filter */}
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">
+                <label className="block text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">
                   Chhetra
                 </label>
                 <select
                   value={selectedChhetra === "all" ? "all" : selectedChhetra.toString()}
                   onChange={(e) => setSelectedChhetra(e.target.value === "all" ? "all" : Number(e.target.value))}
-                  className="w-full p-2.5 border-2 border-gray-300 rounded-lg bg-white text-sm font-semibold focus:border-blue-500 focus:outline-none transition"
+                  className="w-full p-2.5 border-2 border-gray-300 rounded-lg bg-white text-sm font-semibold text-slate-900 focus:border-teal-500 focus:outline-none transition"
                 >
                   <option value="all">All ({chhetras.length})</option>
                   {chhetras.map((ch) => (
@@ -189,13 +189,13 @@ export default function ExplorePage() {
 
               {/* Party Filter */}
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">
+                <label className="block text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">
                   Party
                 </label>
                 <select
                   value={selectedParty}
                   onChange={(e) => setSelectedParty(e.target.value)}
-                  className="w-full p-2.5 border-2 border-gray-300 rounded-lg bg-white text-sm font-semibold focus:border-blue-500 focus:outline-none transition"
+                  className="w-full p-2.5 border-2 border-gray-300 rounded-lg bg-white text-sm font-semibold text-slate-900 focus:border-teal-500 focus:outline-none transition"
                 >
                   <option value="all">All ({uniqueParties.length})</option>
                   {uniqueParties.map((p) => (
@@ -211,7 +211,7 @@ export default function ExplorePage() {
             {(selectedChhetra !== "all" || selectedParty !== "all" || searchQuery.trim()) && (
               <button
                 onClick={clearAllFilters}
-                className="w-full py-2.5 px-4 border-2 border-red-300 hover:bg-red-50 text-red-600 font-bold rounded-lg transition text-sm sm:text-base"
+                className="w-full py-2.5 px-4 border-2 border-red-300 hover:bg-red-50 text-red-600 font-semibold rounded-lg transition text-sm sm:text-base"
               >
                 ✕ Clear Filters
               </button>
@@ -231,33 +231,33 @@ export default function ExplorePage() {
 
         {/* Results */}
         {loading ? (
-          <div className="bg-slate-900 rounded-lg p-8 sm:p-12 text-center border border-slate-800">
+          <div className="bg-white rounded-lg p-8 sm:p-12 text-center border border-gray-200 shadow-sm">
             <div className="inline-block animate-spin text-3xl mb-3">⏳</div>
-            <p className="text-slate-400 font-medium">Loading candidates...</p>
+            <p className="text-gray-600 font-medium">Loading candidates...</p>
           </div>
         ) : error ? (
-          <div className="bg-slate-800 border border-slate-700 rounded-lg p-6 text-center">
-            <p className="text-slate-200 font-bold text-lg">Error Loading</p>
-            <p className="text-slate-400 text-sm mt-2">{error}</p>
+          <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+            <p className="text-red-700 font-semibold text-lg">Error Loading</p>
+            <p className="text-red-600 text-sm mt-2">{error}</p>
           </div>
         ) : grouped.length === 0 ? (
-          <div className="bg-slate-800 border border-slate-700 rounded-lg p-6 sm:p-8 text-center">
-            <p className="text-slate-200 font-bold text-lg">No candidates found</p>
-            <p className="text-slate-400 text-sm mt-2">Try adjusting your filters</p>
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 sm:p-8 text-center">
+            <p className="text-slate-900 font-semibold text-lg">No candidates found</p>
+            <p className="text-gray-600 text-sm mt-2">Try adjusting your filters</p>
           </div>
         ) : (
           <div className="space-y-4 sm:space-y-6">
             {grouped.map((g) => (
               <section
                 key={g.chhetra.id}
-                className="bg-slate-900 rounded-lg border border-slate-800 shadow-lg overflow-hidden"
+                className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden"
               >
                 {/* District Header */}
-                <div className="bg-slate-800 px-4 sm:px-5 py-3 sm:py-4 border-b border-slate-700">
-                  <h2 className="font-black text-lg sm:text-xl text-white">
+                <div className="bg-gray-50 px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-200">
+                  <h2 className="font-bold text-lg sm:text-xl text-slate-900">
                     {g.chhetra.name}
                   </h2>
-                  <p className="text-xs sm:text-sm text-slate-400 mt-1 font-medium">
+                  <p className="text-xs sm:text-sm text-gray-600 mt-1 font-medium">
                     {g.candidates.length} candidate{g.candidates.length !== 1 ? "s" : ""}
                   </p>
                 </div>
@@ -286,9 +286,9 @@ export default function ExplorePage() {
 
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
-    <div className="bg-slate-800 p-2.5 sm:p-3 rounded-lg border border-slate-700 text-center shadow-md">
-      <div className="text-lg sm:text-2xl font-black text-blue-400">{value}</div>
-      <div className="text-xs sm:text-sm font-semibold text-slate-400 mt-1">{label}</div>
+    <div className="bg-white p-2.5 sm:p-3 rounded-lg border border-gray-200 text-center shadow-sm">
+      <div className="text-lg sm:text-2xl font-bold text-teal-600">{value}</div>
+      <div className="text-xs sm:text-sm font-semibold text-gray-600 mt-1">{label}</div>
     </div>
   );
 }

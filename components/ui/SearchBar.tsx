@@ -16,7 +16,7 @@ export default function SearchBar({
   return (
     <div className={`relative ${className}`}>
       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-        <svg className="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
       </div>
@@ -25,14 +25,14 @@ export default function SearchBar({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full pl-10 pr-4 py-3.5 border border-slate-700 rounded-lg bg-slate-800 text-slate-200 placeholder-slate-500 font-semibold focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-slate-600 transition"
+        className="w-full pl-10 pr-4 py-3.5 border border-gray-300 rounded-lg bg-white text-slate-900 placeholder-gray-400 font-semibold focus:ring-2 focus:ring-teal-500 focus:border-teal-500 hover:border-gray-400 transition"
       />
       {value && (
         <button
           onClick={() => onChange("")}
           className="absolute inset-y-0 right-0 pr-3 flex items-center"
         >
-          <svg className="w-5 h-5 text-slate-500 hover:text-slate-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 text-gray-400 hover:text-gray-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>

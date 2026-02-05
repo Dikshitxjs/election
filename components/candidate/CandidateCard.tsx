@@ -3,6 +3,7 @@
 import { useState } from "react";
 import VoteActions from "./VoteActions";
 import Comments from "./Comments";
+import { getPartyFullName } from "@/lib/party-names";
 
 export default function CandidateCard({ candidate, showChhetra = true, showVoteActions = true }: any) {
   const [showComments, setShowComments] = useState(false);
@@ -14,51 +15,51 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
   const supportPercentage = totalVotes > 0 ? Math.round(((candidate.supportCount || 0) / totalVotes) * 100) : 0;
 
   return (
-    <article className="bg-slate-900 rounded-lg shadow-lg border border-slate-700 overflow-hidden flex flex-col h-full hover:shadow-xl transition-shadow duration-200">
-      {/* Candidate Header - Professional */}
-      <div className="bg-slate-800 border-b border-slate-700 p-4 sm:p-5">
+    <article className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow duration-200">
+      {/* Candidate Header */}
+      <div className="p-4 sm:p-5">
         <div className="flex items-start gap-3">
           {/* Photo */}
           <div className="shrink-0">
             <img
-              src={candidate.photo || "/avatar.png"}
+              src={candidate.photo || `/candidates/${candidate.id}.jpg`}
               alt={candidate.name}
-              className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg object-cover ring-2 ring-slate-600 shadow-md"
+              className="w-14 h-14 sm:w-16 sm:h-16 rounded-md object-cover ring-1 ring-gray-100 shadow-sm"
             />
           </div>
 
           {/* Name and Party */}
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-lg sm:text-xl text-white leading-tight truncate">
+            <h3 className="font-semibold text-lg sm:text-xl text-slate-900 leading-tight truncate">
               {candidate.name}
             </h3>
             <div className="flex items-center gap-2 mt-2">
               <img
                 src={partyBadgeSrc}
                 alt={candidate.party}
-                className="w-5 h-5 rounded object-contain shrink-0"
+                className="w-5 h-5 object-contain shrink-0"
                 onError={(e) => {
                   (e.currentTarget as HTMLImageElement).style.display = 'none';
                 }}
               />
-              <span className="text-xs sm:text-sm font-semibold text-slate-300">
-                {candidate.party}
+              <span className="text-xs sm:text-sm font-medium text-gray-600">
+                {getPartyFullName(candidate.party)} ({candidate.party})
               </span>
             </div>
           </div>
 
           {/* Support Percentage Badge */}
           {totalVotes > 0 && (
-            <div className="shrink-0 bg-blue-600 rounded-lg px-3 py-1.5 text-center">
-              <p className="text-sm font-bold text-white">{supportPercentage}%</p>
+            <div className="shrink-0 bg-gray-50 rounded-lg px-3 py-1.5 text-center border border-gray-100">
+              <p className="text-sm font-semibold text-slate-900">{supportPercentage}%</p>
             </div>
           )}
         </div>
 
         {/* Chhetra Info */}
         {showChhetra && (
-          <div className="mt-3 pt-3 border-t border-slate-700">
-            <p className="text-xs sm:text-sm text-slate-400 font-medium">
+          <div className="mt-3 pt-3 border-t border-gray-100">
+            <p className="text-xs sm:text-sm text-gray-500 font-medium">
               {candidate.chhetra_id || candidate.chhetraId}
             </p>
           </div>
@@ -66,31 +67,39 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
       </div>
 
       {/* Content Section */}
-      <div className="flex-1 p-4 sm:p-5 space-y-3 bg-slate-900">
+      <div className="flex-1 p-4 sm:p-5 space-y-3 bg-white">
         {/* Bio Preview */}
         {candidate.bio && (
-          <p className="text-xs sm:text-sm text-slate-300 line-clamp-2 leading-relaxed">
+          <p className="text-sm text-gray-700 line-clamp-2 leading-relaxed">
             {candidate.bio}
           </p>
         )}
 
         {/* Vote Stats */}
-        <div className="flex gap-2.5 text-xs sm:text-sm">
+        <div className="flex gap-2.5 text-sm">
           {candidate.supportCount !== undefined && (
-            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-900/40 text-emerald-300 rounded-lg font-bold border border-emerald-800">
-              <span className="text-lg">+</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-teal-50 text-teal-700 rounded-lg font-semibold border border-teal-100">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M5 12h14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M12 5v14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
               <span>{candidate.supportCount}</span>
             </div>
           )}
           {candidate.opposeCount !== undefined && (
-            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-rose-900/40 text-rose-300 rounded-lg font-bold border border-rose-800">
-              <span className="text-lg">-</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg font-semibold border border-red-100">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M6 6l12 12" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M18 6L6 18" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
               <span>{candidate.opposeCount}</span>
             </div>
           )}
           {candidate.commentsCount !== undefined && candidate.commentsCount > 0 && (
-            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-900/40 text-blue-300 rounded-lg font-bold border border-blue-800">
-              <span className="text-xs">C</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 text-gray-700 rounded-lg font-semibold border border-gray-100">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
               <span>{candidate.commentsCount}</span>
             </div>
           )}
@@ -99,7 +108,7 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
 
       {/* Vote Actions */}
       {showVoteActions && (
-        <div className="p-4 sm:p-5 bg-slate-800 border-t border-slate-700">
+        <div className="p-4 sm:p-5 bg-white border-t border-gray-100">
           <VoteActions
             candidateId={candidate.id}
             initialSupport={candidate.supportCount}
@@ -109,16 +118,16 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
       )}
 
       {/* Comments Section */}
-      <div className="p-4 sm:p-5 border-t border-slate-700 bg-slate-900">
+      <div className="p-4 sm:p-5 border-t border-gray-100 bg-white">
         <button
           onClick={() => setShowComments((s) => !s)}
-          className="w-full text-left text-sm font-bold text-blue-400 hover:text-blue-300 transition"
+          className="w-full text-left text-sm font-semibold text-teal-600 hover:text-teal-700 transition"
         >
           {showComments ? "Hide" : "View"} Comments ({candidate.comments?.length || 0})
         </button>
 
         {showComments && (
-          <div className="mt-3 pt-3 border-t border-slate-700">
+          <div className="mt-3 pt-3 border-t border-gray-100">
             <Comments candidateId={candidate.id} initialComments={candidate.comments || []} />
           </div>
         )}

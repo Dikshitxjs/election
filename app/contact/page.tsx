@@ -44,66 +44,68 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950">
-      <div className="bg-slate-900 border-b border-slate-800 shadow-sm">
+    <div className="min-h-screen bg-white">
+      <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-4xl mx-auto px-4 py-6 sm:py-8">
-          <h1 className="text-2xl sm:text-3xl font-black text-white">Contact</h1>
-          <p className="text-slate-400 mt-2 font-semibold">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Contact</h1>
+          <p className="text-gray-600 mt-2 font-medium">
             If you couldn't find your district number, let us know and we'll help you.
           </p>
         </div>
       </div>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <div className="bg-slate-800 p-6 sm:p-8 rounded-xl border border-slate-700">
-          <h2 className="text-lg font-bold text-slate-200 mb-4">Can't find your district?</h2>
+        <div className="bg-white p-6 sm:p-8 rounded-xl border border-gray-200 shadow-sm">
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">Request Your District</h2>
 
           {submitted ? (
-            <div className="p-4 bg-emerald-900/30 border border-emerald-700 rounded-lg">
-              <p className="text-emerald-200 font-semibold">
-                Thanks — your request was received. We'll reply to the email you provided.
+            <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+              <p className="text-emerald-700 font-semibold">
+                ✓ Thanks — your request was received. We'll reply to the email you provided.
               </p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-bold text-slate-200 mb-2">Your name (optional)</label>
+                <label className="block text-sm font-semibold text-slate-900 mb-2">Your name (optional)</label>
                 <input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full p-3.5 border border-slate-700 rounded-lg bg-slate-900 text-slate-200 placeholder-slate-500 font-semibold focus:border-blue-500 focus:outline-none hover:border-slate-600 transition"
+                  className="w-full p-3.5 border border-gray-300 rounded-lg bg-white text-slate-900 placeholder-gray-400 font-medium focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100 hover:border-gray-400 transition"
+                  placeholder="Your name"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-200 mb-2">Your email</label>
+                <label className="block text-sm font-semibold text-slate-900 mb-2">Your email</label>
                 <input
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"
-                  className="w-full p-3.5 border border-slate-700 rounded-lg bg-slate-900 text-slate-200 placeholder-slate-500 font-semibold focus:border-blue-500 focus:outline-none hover:border-slate-600 transition"
+                  className="w-full p-3.5 border border-gray-300 rounded-lg bg-white text-slate-900 placeholder-gray-400 font-medium focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100 hover:border-gray-400 transition"
+                  placeholder="your@email.com"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-200 mb-2">Message</label>
+                <label className="block text-sm font-semibold text-slate-900 mb-2">Message</label>
                 <textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   rows={6}
-                  className="w-full p-3.5 border border-slate-700 rounded-lg bg-slate-900 text-slate-200 placeholder-slate-500 font-semibold focus:border-blue-500 focus:outline-none hover:border-slate-600 transition resize-none"
-                  placeholder="Describe which district you couldn't find and any details."
+                  className="w-full p-3.5 border border-gray-300 rounded-lg bg-white text-slate-900 placeholder-gray-400 font-medium focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100 hover:border-gray-400 transition resize-none"
+                  placeholder="Describe which district you couldn't find and any details..."
                   required
                 />
               </div>
 
-              {error && <div className="text-rose-300 font-semibold bg-rose-900/30 p-3 rounded-lg border border-rose-700">{error}</div>}
+              {error && <div className="text-red-700 font-semibold bg-red-50 p-3 rounded-lg border border-red-200">⚠️ {error}</div>}
 
               <div>
                 <button
                   disabled={submitting}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-bold disabled:opacity-60 transition"
+                  className="w-full bg-teal-600 hover:bg-teal-700 text-white px-4 py-3 rounded-lg font-semibold disabled:opacity-60 transition"
                 >
                   {submitting ? "Sending..." : "Send Request"}
                 </button>
