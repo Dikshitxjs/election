@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import VoteActions from "./VoteActions";
 import Comments from "./Comments";
 import { getPartyFullName } from "@/lib/party-names";
@@ -8,6 +8,50 @@ import { getPartyAbbreviation } from "@/lib/party-utils";
 
 export default function CandidateCard({ candidate, showChhetra = true, showVoteActions = true }: any) {
   const [showComments, setShowComments] = useState(false);
+  const [photoSrc, setPhotoSrc] = useState<string | null>(null);
+  const [badgeSrc, setBadgeSrc] = useState<string | null>(null);
+
+  // Build slug variants for filenames the user may have used (spaces, hyphens, lowercase)
+  const slug = (s: string) => s.trim();
+  const slugHyphen = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-");
+  const enc = (s: string) => encodeURIComponent(s.trim());
+
+  useEffect(() => {
+    // candidate image fallbacks (.jpg, .png)
+    const name = candidate?.photo || candidate?.name || "";
+    const tryList = [
+      `/candidates/${enc(name)}.jpg`,
+      `/candidates/${enc(name)}.png`,
+      `/candidates/${slugHyphen(name)}.jpg`,
+      `/candidates/${slugHyphen(name)}.png`,
+      `/candidates/${slug(name)}.jpg`,
+      `/candidates/${slug(name)}.png`,
+    ];
+
+    setPhotoSrc(tryList[0]);
+    // store remaining attempts on the element via dataset in onError handler
+    (photoAttempts as any)[candidate?.id] = tryList;
+
+    // party badge
+    const p = candidate?.party || "";
+    const badgeList = [
+      `/party-badges/${enc(p)}.svg`,
+      `/party-badges/${enc(p)}.png`,
+      `/party-badges/${slugHyphen(p)}.svg`,
+      `/party-badges/${slugHyphen(p)}.png`,
+      `/party-badges/${slug(p)}.svg`,
+      `/party-badges/${slug(p)}.png`,
+    ];
+    setBadgeSrc(badgeList[0]);
+    (badgeAttempts as any)[candidate?.id] = badgeList;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [candidate?.id]);
+
+  // shared attempt state (module-scoped) to try multiple src on error
+  const photoAttempts: Record<string | number, string[]> = (globalThis as any)._photoAttempts || {};
+  (globalThis as any)._photoAttempts = photoAttempts;
+  const badgeAttempts: Record<string | number, string[]> = (globalThis as any)._badgeAttempts || {};
+  (globalThis as any)._badgeAttempts = badgeAttempts;
 
   const partyBadgeSrc = candidate.partyIcon || `/party-badges/${String(candidate.party).toLowerCase().replace(/\s+/g, "-")}.svg`;
 
@@ -23,9 +67,24 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
           {/* Photo */}
           <div className="shrink-0">
             <img
-              src={candidate.photo || `/candidates/${candidate.id}.jpg`}
+              src={photoSrc || `/candidates/${candidate.id}.jpg`}
               alt={candidate.name}
               className="w-16 h-16 sm:w-20 sm:h-20 rounded-md object-cover ring-1 ring-gray-100 shadow-sm"
+              onError={(e) => {
+                try {
+                  const arr = (photoAttempts as any)[candidate?.id] || [];
+                  // remove current src and pick next
+                  arr.shift();
+                  if (arr.length > 0) {
+                    setPhotoSrc(arr[0]);
+                  } else {
+                    // final fallback: use numbered id image
+                    setPhotoSrc(`/candidates/${candidate.id}.jpg`);
+                  }
+                } catch (err) {
+                  setPhotoSrc(`/candidates/${candidate.id}.jpg`);
+                }
+              }}
             />
           </div>
 
@@ -36,11 +95,22 @@ export default function CandidateCard({ candidate, showChhetra = true, showVoteA
             </h3>
             <div className="flex items-center gap-2 mt-2">
               <img
-                src={partyBadgeSrc}
+                src={badgeSrc || partyBadgeSrc}
                 alt={candidate.party}
-                className="w-6 h-6 sm:w-7 sm:h-7 object-contain shrink-0"
+                className="w-6 h-6 sm:w-7 sm:h-7 object-contain shrink-0 rounded"
                 onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).style.display = 'none';
+                  try {
+                    const arr = (badgeAttempts as any)[candidate?.id] || [];
+                    arr.shift();
+                    if (arr.length > 0) {
+                      setBadgeSrc(arr[0]);
+                    } else {
+                      // hide if nothing worked
+                      (e.currentTarget as HTMLImageElement).style.display = "none";
+                    }
+                  } catch (err) {
+                    (e.currentTarget as HTMLImageElement).style.display = "none";
+                  }
                 }}
               />
               <div className="flex flex-col leading-tight">
