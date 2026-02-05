@@ -27,6 +27,26 @@ export default function Hero() {
           </p>
         </div>
 
+        {/* Mahabhidanta Chhetras card */}
+        <div className="mb-16">
+          <div className="border-l-4 border-teal-600 bg-teal-50 rounded-lg p-6 shadow-sm">
+            <div className="flex gap-4 items-start">
+              <div className="shrink-0 w-14 h-14 rounded-lg bg-white flex items-center justify-center text-teal-600 shadow-sm">
+                <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2l3 4h5v2h-1l-1 10H7L6 8H5V6h5L12 2m0 2l-2 2h4l-2-2m0 6h6l1 8H5l1-8h6z" />
+                </svg>
+              </div>
+
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-slate-900">MahaBhidanta Chhetras</h3>
+                <p className="text-sm text-gray-700 mt-2 leading-relaxed">
+                  This platform features the <strong>most popular constituencies</strong> across Nepal. The candidates and regions listed represent key electoral areas.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* CTA Buttons - two main actions */}
         <div className="grid grid-cols-2 gap-5 mb-16">
           <button
@@ -34,7 +54,7 @@ export default function Hero() {
             className="py-4 px-6 text-base font-semibold rounded-lg bg-teal-600 hover:bg-teal-700 text-white shadow-md hover:shadow-lg transition flex items-center justify-center gap-2"
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+              <path d="M3 13h2v8H3zm4-8h2v16H7zm4-2h2v18h-2zm4 4h2v14h-2zm4-2h2v16h-2z" />
             </svg>
             Start Voting
           </button>
