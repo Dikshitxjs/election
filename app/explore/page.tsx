@@ -146,7 +146,7 @@ export default function ExplorePage() {
       )}
 
       <main className="px-4 sm:px-6 py-4 sm:py-6 max-w-6xl mx-auto pb-24">
-        {/* Search Bar - Mobile First */}
+        {/* Search Bar  */}
         <div className="mb-4 sm:mb-6">
           <SearchBar
             value={searchQuery}
@@ -155,10 +155,10 @@ export default function ExplorePage() {
           />
         </div>
 
-        {/* Filters - Mobile Optimized */}
+        {/* Filters  */}
         <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-5 mb-4 sm:mb-6 shadow-sm">
           <div className="space-y-3 sm:space-y-4">
-            {/* Find Your Chhetra Button */}
+            {/*  Button */}
             <button
               onClick={() => setShowChhetraSelector(true)}
               className="w-full bg-linear-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-semibold py-3 rounded-lg transition shadow-md hover:shadow-lg text-sm sm:text-base flex items-center justify-center gap-2"
@@ -170,7 +170,7 @@ export default function ExplorePage() {
               Find Your Chhetra
             </button>
 
-            {/* Filters Grid - Mobile First */}
+            {/* Filters Grid  */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {/* Chhetra Filter */}
               <div>
@@ -211,7 +211,7 @@ export default function ExplorePage() {
               </div>
             </div>
 
-            {/* Clear Filters Button - Red Text */}
+            {/* Clear Filters  */}
             {(selectedChhetra !== "all" || selectedParty !== "all" || searchQuery.trim()) && (
               <button
                 onClick={clearAllFilters}
